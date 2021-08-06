@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+{% load bootstrap5 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    {% if request.user.is_authenticated %}
+    <p>Hello, {{request.user.playerID}} | <a href="{% url 'logout' %}">Logout</a></p>
+    {% else %}
+    <p><a href="{% url 'register' %}">Register</a> | <a href="{% url 'login' %}">Login</a></p>
+    {% endif %}
+    <hr>
+</head>
+<body>
+<h1>Ciao Mondo</h1>
+</body>
+</html>
