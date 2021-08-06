@@ -1,6 +1,9 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from account.models import Account
+#from account.models import Statistiche
+from account.models import Equipaggiamento
+
 
 
 class AccountAdmin(UserAdmin):
@@ -14,3 +17,5 @@ class AccountAdmin(UserAdmin):
 
 
 admin.site.register(Account, AccountAdmin)
+#admin.site.register(Statistiche)
+admin.site.register(Equipaggiamento)
