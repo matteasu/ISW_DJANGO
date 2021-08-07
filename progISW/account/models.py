@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from struttureGioco.models import Personaggio
 
 
 # Create your models here.
@@ -40,6 +41,7 @@ class Account(AbstractBaseUser):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
+    personaggio = models.ForeignKey(Personaggio, on_delete=models.CASCADE, null=True)
 
     # indico con che campo farò il login
     USERNAME_FIELD = "playerID"
@@ -58,26 +60,3 @@ class Account(AbstractBaseUser):
     def has_module_perms(self, app_label):
         return True
 
-
-class Statistiche(models.Model):
-    vitalita = models.IntegerField(default=0)
-    forza = models.IntegerField(default=0)
-    destrezza = models.IntegerField(default=0)
-    intelligenza = models.IntegerField(default= 0)
-    tempra = models.IntegerField(default=0)
-
-
-TIPOEQUIPAGGIAMENTO = [
-    ("P", "ArmaPrimaria"),
-    ("S", "ArmaSecondaria"),
-    ("A", "Armatura"),
-]
-
-
-class Equipaggiamento(Statistiche):
-    nome = models.CharField(max_length=50, unique=True)
-    tipo = models.CharField(max_length=1, choices=TIPOEQUIPAGGIAMENTO, null=True)
-    abilitato = models.BooleanField(default=True)
-
-    def __str__(self):
-        return self.nome
