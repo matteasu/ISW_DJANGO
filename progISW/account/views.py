@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from account.forms import RegistrationForm, LoginForm
+from struttureGioco.models import Personaggio
 
 
 # Create your views here.
@@ -14,6 +15,15 @@ def registration_view(request):
 			playerID = form.cleaned_data.get("playerID")
 			raw_psw = form.cleaned_data.get("password1")
 			account = authenticate(playerID = playerID, password = raw_psw)
+
+			# Creazione e assegnamento personaggio relativo all'account
+
+			p = Personaggio(nome=account.playerID)
+			p.save()
+
+			account.personaggio=p
+			account.save()
+
 			login(request, account)
 			return redirect("home")
 		else:
