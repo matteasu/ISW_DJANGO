@@ -8,14 +8,44 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    {% if request.user.is_authenticated %}
-    <p>Hello, {{request.user.playerID}} | <a href="{% url 'logout' %}">Logout</a></p>
-    {% else %}
-    <p><a href="{% url 'register' %}">Register</a> | <a href="{% url 'login' %}">Login</a></p>
-    {% endif %}
-    <hr>
 </head>
 <body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Home</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <!-- Robe nostre -->
+        {% if request.user.is_authenticated %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+        </li>
+        {% else %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'register' %}">Register</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'login' %}">Login</a>
+        </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>
+
 <h1>Ciao Mondo</h1>
+{% if request.user.is_authenticated %}
+<h4 class="font-monospace">PERSONAGGIO: {{request.user.personaggio.nome }}</h4>
+<h5 class="font-monospace">VIT {{request.user.personaggio.vita }}</h5>
+<h5 class="font-monospace">VTL {{request.user.personaggio.vitalita }}</h5>
+<h5 class="font-monospace">FRZ {{request.user.personaggio.forza }}</h5>
+<h5 class="font-monospace">DEX {{request.user.personaggio.destrezza }}</h5>
+<h5 class="font-monospace">INT {{request.user.personaggio.intelligenza }}</h5>
+<h5 class="font-monospace">TMP {{request.user.personaggio.tempra }}</h5>
+{% endif %}
 </body>
 </html>
