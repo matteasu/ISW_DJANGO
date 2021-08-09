@@ -37,7 +37,6 @@
   </div>
 </nav>
 
-<h1>Ciao Mondo</h1>
 {% if request.user.is_authenticated %}
 <h4 class="font-monospace">PERSONAGGIO: {{request.user.personaggio.nome }}</h4>
 <h5 class="font-monospace">VIT {{request.user.personaggio.vita }}</h5>
@@ -46,6 +45,22 @@
 <h5 class="font-monospace">DEX {{request.user.personaggio.destrezza }}</h5>
 <h5 class="font-monospace">INT {{request.user.personaggio.intelligenza }}</h5>
 <h5 class="font-monospace">TMP {{request.user.personaggio.tempra }}</h5>
+<br>
+<h4 class="font-monospace">EQUIPAGGIAMENTO</h4>
+{% if request.user.personaggio.armaPrimaria is not None %}
+<h5 class="font-monospace">PRIMARIA - {{request.user.personaggio.armaPrimaria }}</h5>
+{% endif %}
+
+{% if request.user.personaggio.armaSecondaria is not None %}
+<h5 class="font-monospace">SECONDARIA - {{request.user.personaggio.armaSecondaria }}</h5>
+{% else %}
+<h5 class="font-monospace">SECONDARIA - VUOTO</h5>
+{% endif %}
+
+{% if request.user.personaggio.armatura is not None %}
+<h5 class="font-monospace">ARMATURA - {{request.user.personaggio.armatura }}</h5>
+{% endif %}
+
 {% endif %}
 </body>
 </html>
