@@ -18,10 +18,10 @@ def registration_view(request):
 
 			# Creazione e assegnamento personaggio relativo all'account
 
-			p = Personaggio(nome=account.playerID)
+			p = Personaggio(nome = account.playerID)
 			p.save()
 
-			account.personaggio=p
+			account.personaggio = p
 			account.save()
 
 			login(request, account)
@@ -36,7 +36,7 @@ def registration_view(request):
 
 def logout_view(request):
 	logout(request)
-	return redirect('home')
+	return redirect('login')
 
 
 def login_view(request):

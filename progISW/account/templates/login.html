@@ -22,8 +22,9 @@
                     <form method="post" class="form">
                         {% csrf_token %}
                         {% bootstrap_form login_form %}
+                        <a href="{% url 'register' %}"><p>Non sei registrato? </p></a>
                         {% buttons %}
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="submit" class="btn btn-primary">Login</button>
                         {% endbuttons %}
                     </form>
                 </div>

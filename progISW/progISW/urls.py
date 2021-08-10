@@ -20,8 +20,8 @@ from account.views import registration_view, logout_view, login_view
 
 urlpatterns = [
 	path('admin/', admin.site.urls),
-	path('', homeView, name = "home"),
+	path('', login_view, name = "login"),
 	path('register/', registration_view, name = "register"),
-	path('login/', login_view, name = "login"),
+	path('home/', homeView, name = "home"),
 	path('logout/', logout_view, name = "logout"),
 ]
