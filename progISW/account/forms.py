@@ -1,6 +1,8 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate
+from django.core.exceptions import ValidationError
+
 from account.models import Account
 
 
@@ -25,4 +27,6 @@ class LoginForm(forms.ModelForm):
 			password = self.cleaned_data['password']
 			# verifico se le credenziali sono valide, altrimenti mostro dei messaggi di errore
 			if not authenticate(playerID = playerID, password = password):
-				raise forms.ValidationError("Credenziali non valide")
+				raise ValidationError("Credenziali non valide")
+		else:
+			raise ValidationError("Form non valido")
