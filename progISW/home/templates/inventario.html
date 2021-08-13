@@ -14,7 +14,7 @@
 <body>
 <nav class="navbar navbar-expand fixed-top mb-5 bg-light navbar-light ">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">Home</a>
+        <a class="navbar-brand" href="{% url 'home' %}">Home</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -23,9 +23,6 @@
             <ul class="navbar-nav  mb-2 mb-lg-0">
                 <!-- Robe nostre -->
                 {% if request.user.is_authenticated %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'inventario' %}">Inventario</a>
-                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'logout' %}">Logout</a>
                 </li>
@@ -45,7 +42,7 @@
 <div class="container-fluid">
     {% if request.user.is_authenticated %}
     <div class="row pt-5">
-        <div class="col ms-1 fixed-top mt-5 pt-3 " id="stat">
+        <div class="col-lg-3 ms-1 fixed-top mt-5 pt-3 " id="stat">
             <h4 class="font-monospace">PERSONAGGIO: {{request.user.personaggio.nome }}</h4>
             <h6 class="font-monospace">VIT {{request.user.personaggio.vita }}</h6>
             <h6 class="font-monospace">VTL {{request.user.personaggio.vitalita }}</h6>
@@ -53,8 +50,7 @@
             <h6 class="font-monospace">DEX {{request.user.personaggio.destrezza }}</h6>
             <h6 class="font-monospace">INT {{request.user.personaggio.intelligenza }}</h6>
             <h6 class="font-monospace">TMP {{request.user.personaggio.tempra }}</h6>
-
-             <h4 class="font-monospace">EQUIPAGGIAMENTO</h4>
+            <h4 class="font-monospace mt-5">EQUIPAGGIAMENTO</h4>
             {% if request.user.personaggio.armaPrimaria is not None %}
             <h6 class="font-monospace">PRIMARIA - {{request.user.personaggio.armaPrimaria }}</h6>
             {% else %}
@@ -82,11 +78,31 @@
                     <div class="card h-100">
                         <div class="card-body">
                             <h5 class="card-title">{{item.nome}}</h5>
+                             {% if item.tipo == "P"%}
+                                <p class="card-text fst-italic">Arma Primaria</p>
+                            {% elif item.tipo == "S"%}
+                                <p class="card-text fst-italic">Arma Secondaria</p>
+                            {% else %}
+                                <p class="card-text fst-italic">Armatura</p>
+                            {% endif %}
                             <p class="card-text">VTL {{item.vitalita}}</p>
                             <p class="card-text">FRZ {{item.forza}}</p>
                             <p class="card-text">DEX {{item.destrezza}}</p>
                             <p class="card-text">INT {{item.intelligenza}}</p>
                             <p class="card-text">TMP {{item.tempra}}</p>
+                        </div>
+
+                        <div class="card-footer text-center">
+                            <!-- l'if va tenuto su una sola riga altrimenti da errore ATTENTI A QUANDO FATE CTRL+ALT+L -->
+                            {% if item != request.user.personaggio.armaPrimaria and item != request.user.personaggio.armaSecondaria and item != request.user.personaggio.armatura %}
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="idItem" value="{{item.id}}">
+                                    <button type="submit" class=" btn btn-primary">Equipaggia</button>
+                                </form>
+                            {% else %}
+                            {% bootstrap_button "Equipaggiata" button_class="disabled" %}
+                            {% endif %}
                         </div>
                     </div>
                 </div>
