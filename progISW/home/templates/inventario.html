@@ -7,12 +7,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Inventario</title>
     {% load static %}
-    <link rel="stylesheet" href="{% static './styles.css'%}">
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-light ">
+<nav class="navbar navbar-expand fixed-top mb-5 bg-light navbar-light ">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">Home</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
@@ -44,8 +44,8 @@
 </nav>
 <div class="container-fluid">
     {% if request.user.is_authenticated %}
-    <div class="row justify-content-start ">
-        <div class="col ms-3  ">
+    <div class="row pt-5">
+        <div class="col ms-1 fixed-top mt-5 pt-3 " id="stat">
             <h4 class="font-monospace">PERSONAGGIO: {{request.user.personaggio.nome }}</h4>
             <h6 class="font-monospace">VIT {{request.user.personaggio.vita }}</h6>
             <h6 class="font-monospace">VTL {{request.user.personaggio.vitalita }}</h6>
@@ -53,22 +53,8 @@
             <h6 class="font-monospace">DEX {{request.user.personaggio.destrezza }}</h6>
             <h6 class="font-monospace">INT {{request.user.personaggio.intelligenza }}</h6>
             <h6 class="font-monospace">TMP {{request.user.personaggio.tempra }}</h6>
-        </div>
-        <div class="col-2 align-self-end me-3">
-            <div class="btn-group" role="group">
-                <div class="btn btn-default me-2" >
-                    {% bootstrap_button "Inventario" size='large' button_type="link" href="../inventario/" %}
-                </div>
-                <div class="btn btn-default">
-                    {% bootstrap_button "Battaglia" size='large' button_type="link" href="../inventario/" %}
-                </div>
-            </div>
-        </div>
 
-    </div>
-    <div class="row g-0 justify-content-start">
-        <div class="col-auto ms-3 ">
-            <h4 class="font-monospace">EQUIPAGGIAMENTO</h4>
+             <h4 class="font-monospace">EQUIPAGGIAMENTO</h4>
             {% if request.user.personaggio.armaPrimaria is not None %}
             <h6 class="font-monospace">PRIMARIA - {{request.user.personaggio.armaPrimaria }}</h6>
             {% else %}
@@ -86,8 +72,30 @@
             {% else %}
             <h6 class="font-monospace">ARMATURA - VUOTO</h6>
             {% endif %}
+
         </div>
+
+        <div class="col offset-md-6 mt-5 mb-3" id="inventario">
+            <div class="row row-cols-sm-1 row-cols-lg-2 row-cols-xl-3 g-4">
+                {% for item in zaino %}
+                <div class="col">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">{{item.nome}}</h5>
+                            <p class="card-text">VTL {{item.vitalita}}</p>
+                            <p class="card-text">FRZ {{item.forza}}</p>
+                            <p class="card-text">DEX {{item.destrezza}}</p>
+                            <p class="card-text">INT {{item.intelligenza}}</p>
+                            <p class="card-text">TMP {{item.tempra}}</p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
     </div>
+
     {% endif %}
 </div>
 </body>
