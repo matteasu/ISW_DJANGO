@@ -47,7 +47,7 @@
     <div class="row justify-content-start ">
         <div class="col ms-3  ">
             <h4 class="font-monospace">PERSONAGGIO: {{request.user.personaggio.nome }}</h4>
-            <h6 class="font-monospace">VIT {{request.user.personaggio.vita }}</h6>
+            <h6 class="font-monospace">VIT {{vitaEffettiva}}</h6>
             <h6 class="font-monospace">VTL {{request.user.personaggio.vitalita }}</h6>
             <h6 class="font-monospace">FRZ {{request.user.personaggio.forza }}</h6>
             <h6 class="font-monospace">DEX {{request.user.personaggio.destrezza }}</h6>
@@ -56,7 +56,7 @@
         </div>
         <div class="col-2 align-self-end me-3">
             <div class="btn-group" role="group">
-                <div class="btn btn-default me-2" >
+                <div class="btn btn-default me-2">
                     {% bootstrap_button "Inventario" size='large' button_type="link" href="../inventario/" %}
                 </div>
                 <div class="btn btn-default">
