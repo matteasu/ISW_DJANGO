@@ -72,6 +72,9 @@
         </div>
 
         <div class="col offset-md-6 mt-5 mb-3" id="inventario">
+            {%if zaino is None %}
+            <h4>Inventario Vuoto</h4>
+            {% endif %}
             <div class="row row-cols-sm-1 row-cols-lg-2 row-cols-xl-3 g-4">
                 {% for item in zaino %}
                 <div class="col">

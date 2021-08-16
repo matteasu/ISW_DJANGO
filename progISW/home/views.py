@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 
 # Create your views here.
-from struttureGioco.models import Equipaggiamento
+from struttureGioco.models import Equipaggiamento, Boss
 from struttureGioco.funzioni import aggiungiStatistiche, rimuoviStatistiche
 
 
@@ -64,6 +64,24 @@ def inventarioView(request):
     if not user.is_authenticated:
         return redirect("login")
 
-    zaino = user.personaggio.zaino.all()
+    if user.personaggio.zaino.all():
+        zaino = user.personaggio.zaino.all()
+    else:
+        zaino = None
+
+    print(zaino)
 
     return render(request, "inventario.html", {'zaino': zaino, 'vitaEffettiva': vitaEffettiva})
+
+def luoghiView(request):
+    boss = Boss.objects.all()
+    print(boss)
+    return render(request, "luoghi.html", {'listaBoss': boss})
+
+def dettaglioBossView(request, nomeLuogo):
+    try:
+        boss = Boss.objects.get(luogo = nomeLuogo)
+    except Boss.DoesNotExist:
+        boss = None
+
+    return render(request, "dettaglioBoss.html", {'boss': boss})

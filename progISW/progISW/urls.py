@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from home.views import homeView, inventarioView
+from home.views import homeView, inventarioView, luoghiView, dettaglioBossView
 from account.views import registration_view, logout_view, login_view
 
 urlpatterns = [
@@ -25,4 +25,6 @@ urlpatterns = [
 	path('home/', homeView, name = "home"),
 	path('logout/', logout_view, name = "logout"),
 	path('inventario/', inventarioView, name = "inventario"),
+	path('luoghi/', luoghiView, name = "luoghi"),
+	path(r'boss/<nomeLuogo>/', dettaglioBossView, name = "dettaglioBoss"),
 ]

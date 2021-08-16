@@ -13,7 +13,7 @@ TIPOEQUIPAGGIAMENTO = [
 
 class Boss(models.Model):
     nome = models.CharField(max_length=50, unique=True)
-    luogo = models.CharField(max_length=100, null=True)
+    luogo = models.CharField(max_length=100, null=True, unique=True)
     vita = models.IntegerField(default=10)
     abilitato = models.BooleanField(default=False)
 
@@ -25,6 +25,9 @@ class Boss(models.Model):
 
     def __str__(self):
         return self.nome
+
+    def get_absolute_url(self):
+        return reverse('dettaglioBoss', args=[self.luogo])
 
 
 class Equipaggiamento(models.Model):
