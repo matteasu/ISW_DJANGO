@@ -40,7 +40,7 @@
     </div>
 </nav>
 <div class="container-fluid">
-    {% if request.user.is_authenticated %}
+
     <div class="row pt-5">
         <div class="col-lg-3 ms-1 fixed-top mt-5 pt-3 " id="stat">
             <h4 class="font-monospace">PERSONAGGIO: {{request.user.personaggio.nome }}</h4>
@@ -115,7 +115,7 @@
 
     </div>
 
-    {% endif %}
+
 </div>
 </body>
 </html>

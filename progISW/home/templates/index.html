@@ -43,7 +43,7 @@
     </div>
 </nav>
 <div class="container-fluid">
-    {% if request.user.is_authenticated %}
+
     <div class="row justify-content-start ">
         <div class="col ms-3  ">
             <h4 class="font-monospace">PERSONAGGIO: {{request.user.personaggio.nome }}</h4>
@@ -58,7 +58,7 @@
 
     </div>
     <div class="row justify-content-end">
-         <div class="col-auto ms-5">
+        <div class="col-auto ms-5">
             <div class="btn-group" role="group">
                 <div class="btn btn-default ">
                     {% bootstrap_button "Inventario" size='large' button_type="link" href="../inventario/" %}
@@ -91,7 +91,7 @@
             {% endif %}
         </div>
     </div>
-    {% endif %}
+
 </div>
 </body>
 </html>

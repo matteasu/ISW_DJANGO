@@ -1,10 +1,97 @@
 <!DOCTYPE html>
+{% load bootstrap5 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Scelta Luogo di battaglia</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
 </head>
 <body>
-{{boss.nome}}
+<nav class="navbar navbar-expand mb-5 bg-light navbar-light ">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{% url 'home' %}">Home</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav  mb-2 mb-lg-0">
+                <!-- Robe nostre -->
+                {% if request.user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'inventario' %}">Inventario</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                </li>
+
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'register' %}">Register</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'login' %}">Login</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-6 mx-auto">
+            <div class="card  border-secondary mb-3">
+
+                <div class="card-body">
+                    <div class="row">
+                        <h4 class="card-title">{{boss.nome}}</h4>
+
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <img src="/static/{{boss.nome}}.jpg" class="align-middle" >
+                        </div>
+                        <div class="col ">
+                            <h5 class="card-text fst-italic">Statistiche:</h5>
+                            <h6 class="font-monospace card-text">VTL {{boss.vitalita }}</h6>
+                            <h6 class="font-monospace card-text">FRZ {{boss.forza }}</h6>
+                            <h6 class="font-monospace card-text">DEX {{boss.destrezza }}</h6>
+                            <h6 class="font-monospace card-text">INT {{boss.intelligenza }}</h6>
+                            <h6 class="font-monospace card-text">TMP {{boss.tempra }}</h6>
+                        </div>
+                    </div>
+                </div>
+
+
+                <ul class="list-group list-group-flush">
+                    <h5 class="list-group-item">Lista dei possibili drop:</h5>
+                    {% for item in listaDrop %}
+                    <li class="list-group-item">{{item.nome}}
+                        {% if item.tipo == "A"%}
+                        <h6 class="fst-italic">Armatura</h6>
+                        {%elif item.tipo == "P"%}
+                        <h6 class="fst-italic">Arma Primaria</h6>
+                        {%else%}
+                        <h6 class="fst-italic">Arma Secondaria</h6>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+                <div class="card-body align-self-center">
+                    <a class="btn-lg  btn btn-warning " href="../luoghi/">Fuggi</a>
+                    <a class=" btn-lg  btn btn-danger " href="">Combatti</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
 </body>
 </html>
