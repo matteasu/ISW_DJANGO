@@ -7,21 +7,44 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Scelta Luogo di battaglia</title>
+    <title>Luoghi</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'styles.css' %}">
 </head>
 <body>
-<nav class="navbar navbar-expand mb-5 bg-light navbar-light ">
+<nav class="navbar navbar-expand navbar-light bg-light mb-5  ">
     <div class="container-fluid">
-        <a class="navbar-brand" href="{% url 'home' %}">Home</a>
+        <a class="navbar-brand" href="../home">Home</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="collapse navbar-collapse" id="drop">
             <ul class="navbar-nav  mb-2 mb-lg-0">
                 <!-- Robe nostre -->
+                {% if request.user.is_admin%}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                       data-bs-toggle="dropdown" aria-expanded="false">
+                        Strumenti Admin
+                    </a>
+                    <ul class="dropdown-menu " aria-labelledby="navbarDropdownMenuLink">
+                        <li><a class="dropdown-item" href="http://127.0.0.1:8000/admin/struttureGioco/boss/">Aggiungi/Modifica Boss</a>
+                        </li>
+                        <li><a class="dropdown-item" href="http://127.0.0.1:8000/admin/struttureGioco/equipaggiamento/">Aggiungi/Modifica
+                            Equipaggiamento</a></li>
+
+                    </ul>
+                </li>
+                {%endif%}
+
+
+            </ul>
+        </div>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav  mb-2 mb-lg-0">
+                <!-- Robe nostre -->
+
                 {% if request.user.is_authenticated %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'inventario' %}">Inventario</a>
@@ -29,7 +52,6 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'logout' %}">Logout</a>
                 </li>
-
                 {% else %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'register' %}">Register</a>
@@ -39,6 +61,7 @@
                     <a class="nav-link" href="{% url 'login' %}">Login</a>
                 </li>
                 {% endif %}
+
             </ul>
         </div>
     </div>
@@ -66,5 +89,6 @@
     </div>
 
 </div>
+
 </body>
 </html>

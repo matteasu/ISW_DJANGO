@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-
+import random
 # Create your views here.
 from struttureGioco.models import Equipaggiamento, Boss
 from struttureGioco.funzioni import aggiungiStatistiche, rimuoviStatistiche
@@ -93,7 +93,34 @@ def dettaglioBossView(request, nomeLuogo):
 	try:
 		boss = Boss.objects.get(luogo = nomeLuogo)
 		listaDrop = Equipaggiamento.objects.filter(boss = boss).order_by('nome')
+
+		if request.POST:
+			print("hehehehe")
+			flag = True
+			vittoria=True
+			drop = Equipaggiamento.objects.filter(boss = boss).order_by('nome').values_list('nome', flat = True)
+			indiceElemento = random.randint(0, len(drop) - 1)
+			print(indiceElemento)
+			elementoVinto = Equipaggiamento.objects.get(nome = drop[indiceElemento])
+			print(elementoVinto)
+
+			if not user.personaggio.zaino.filter(nome=drop[indiceElemento]):
+				user.personaggio.zaino.add(elementoVinto)
+				user.personaggio.save()
+				elementoGiaVinto = False
+			else:
+				elementoGiaVinto=True
+
+		else:
+			print("nonono")
+			elementoGiaVinto = None
+			flag = False
+			vittoria = None
+			elementoVinto = None
+
 	except Boss.DoesNotExist:
 		return redirect("luoghi")
 
-	return render(request, "dettaglioBoss.html", {'boss': boss, 'listaDrop': listaDrop})
+	return render(request, "dettaglioBoss.html",
+	              {'boss': boss, 'listaDrop': listaDrop, 'flag': flag, 'vittoria': vittoria,
+	               'elementoVinto': elementoVinto,'elementoGiaVinto':elementoGiaVinto})

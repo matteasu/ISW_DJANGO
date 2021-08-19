@@ -6,90 +6,138 @@
 {% bootstrap_javascript %}
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    {% load static %}
-    <link rel="stylesheet" href="{% static './styles.css'%}">
+	<meta charset="UTF-8">
+	<title>Avventure RPG</title>
+	{% load static %}
+	<link rel="stylesheet" href="{% static './styles.css'%}">
 </head>
 <body>
-<nav class="navbar navbar-expand navbar-light ">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">Home</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav  mb-2 mb-lg-0">
-                <!-- Robe nostre -->
-                {% if request.user.is_authenticated %}
+<nav class="navbar navbar-expand navbar-dark bg-dark mb-3 ">
+	<div class="container-fluid">
+		<a class="navbar-brand" href="#">Home</a>
+		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+		        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="drop">
+			<ul class="navbar-nav  mb-2 mb-lg-0">
+				<!-- Robe nostre -->
+				{% if request.user.is_admin%}
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+					   data-bs-toggle="dropdown" aria-expanded="false">
+						Strumenti Admin
+					</a>
+					<ul class="dropdown-menu " aria-labelledby="navbarDropdownMenuLink">
+						<li><a class="dropdown-item" href="http://127.0.0.1:8000/admin/struttureGioco/boss/">Aggiungi/Modifica
+							Boss</a>
+						</li>
+						<li><a class="dropdown-item" href="http://127.0.0.1:8000/admin/struttureGioco/equipaggiamento/">Aggiungi/Modifica
+							Equipaggiamento</a></li>
 
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'logout' %}">Logout</a>
-                </li>
-                {% else %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'register' %}">Register</a>
-                </li>
+					</ul>
+				</li>
+				{%endif%}
 
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'login' %}">Login</a>
-                </li>
-                {% endif %}
-            </ul>
-        </div>
-    </div>
+
+			</ul>
+		</div>
+		<div class="collapse navbar-collapse">
+			<ul class="navbar-nav  mb-2 mb-lg-0">
+				<!-- Robe nostre -->
+
+				{% if request.user.is_authenticated %}
+
+				<li class="nav-item">
+					<a class="nav-link" href="{% url 'logout' %}">Logout</a>
+				</li>
+				{% else %}
+				<li class="nav-item">
+					<a class="nav-link" href="{% url 'register' %}">Register</a>
+				</li>
+
+				<li class="nav-item">
+					<a class="nav-link" href="{% url 'login' %}">Login</a>
+				</li>
+				{% endif %}
+
+			</ul>
+		</div>
+	</div>
 </nav>
 <div class="container-fluid">
 
-    <div class="row justify-content-start ">
-        <div class="col ms-3  ">
-            <h4 class="font-monospace">PERSONAGGIO: {{request.user.personaggio.nome }}</h4>
-            <h6 class="font-monospace">VIT {{vitaEffettiva}}</h6>
-            <h6 class="font-monospace">VTL {{request.user.personaggio.vitalita }}</h6>
-            <h6 class="font-monospace">FRZ {{request.user.personaggio.forza }}</h6>
-            <h6 class="font-monospace">DEX {{request.user.personaggio.destrezza }}</h6>
-            <h6 class="font-monospace">INT {{request.user.personaggio.intelligenza }}</h6>
-            <h6 class="font-monospace">TMP {{request.user.personaggio.tempra }}</h6>
-        </div>
+	<div class="row justify-content-start ">
+		<div class="col-auto ms-3  ">
 
 
-    </div>
-    <div class="row justify-content-end">
-        <div class="col-auto ms-5">
-            <div class="btn-group" role="group">
-                <div class="btn btn-default ">
-                    {% bootstrap_button "Inventario" size='large' button_type="link" href="../inventario/" %}
-                </div>
-                <div class="btn btn-default">
-                    {% bootstrap_button "Battaglia" size='large' button_type="link" href="../luoghi/" %}
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row g-0 justify-content-start">
-        <div class="col-auto ms-3 ">
-            <h4 class="font-monospace">EQUIPAGGIAMENTO</h4>
-            {% if request.user.personaggio.armaPrimaria is not None %}
-            <h6 class="font-monospace">PRIMARIA - {{request.user.personaggio.armaPrimaria }}</h6>
-            {% else %}
-            <h6 class="font-monospace">PRIMARIA - VUOTO</h6>
-            {% endif %}
+			<div class="card  mb-sm-3 ">
 
-            {% if request.user.personaggio.armaSecondaria is not None %}
-            <h6 class="font-monospace">SECONDARIA - {{request.user.personaggio.armaSecondaria }}</h6>
-            {% else %}
-            <h6 class="font-monospace">SECONDARIA - VUOTO</h6>
-            {% endif %}
+				<div class="card-header">
+					<h5 class="card-title font-monospace">{{request.user.personaggio.nome }}</h5>
+				</div>
+				<div class="card-body">
+					<h5 class="font-monospace text-uppercase">Statistiche:</h5>
+				</div>
+				<ul class="list-group list-group-flush">
 
-            {% if request.user.personaggio.armatura is not None %}
-            <h6 class="font-monospace">ARMATURA - {{request.user.personaggio.armatura }}</h6>
-            {% else %}
-            <h6 class="font-monospace">ARMATURA - VUOTO</h6>
-            {% endif %}
-        </div>
-    </div>
+					<li class="list-group-item font-monospace ">VITA {{vitaEffettiva}}</li>
+					<li class="list-group-item font-monospace ">VITALIT&Agrave; {{request.user.personaggio.vitalita }}
+					</li>
+					<li class="list-group-item font-monospace ">FORZA {{request.user.personaggio.forza }}</li>
+					<li class="list-group-item font-monospace ">DESTREZZA {{request.user.personaggio.destrezza }}</li>
+					<li class="list-group-item font-monospace ">INTELLIGENZA {{request.user.personaggio.intelligenza}}</li>
+					<li class="list-group-item font-monospace ">TEMPRA {{request.user.personaggio.tempra }}</li>
+				</ul>
+			</div>
+
+
+		</div>
+		<div class="col-auto ms-3">
+			<div class="card  ">
+
+				<div class="card-body">
+					<h5 class="font-monospace text-uppercase">Equipaggiamento:</h5>
+				</div>
+				<ul class="list-group list-group-flush">
+					{% if request.user.personaggio.armaPrimaria is not None %}
+					<li class="list-group-item font-monospace ">ARMA PRIMARIA - {{request.user.personaggio.armaPrimaria }}</li>
+					{% else %}
+					<li class="list-group-item font-monospace ">ARMA PRIMARIA - VUOTO</li>
+					{% endif %}
+
+					{% if request.user.personaggio.armaSecondaria is not None %}
+					<li class="list-group-item font-monospace ">ARMA SECONDARIA - {{request.user.personaggio.armaSecondaria }}</li>
+					{% else %}
+					<li class="list-group-item font-monospace ">ARMA SECONDARIA - VUOTO</li>
+					{% endif %}
+
+					{% if request.user.personaggio.armatura is not None %}
+					<li class="list-group-item font-monospace ">ARMATURA - {{request.user.personaggio.armatura }}</li>
+					{% else %}
+					<li class="list-group-item font-monospace ">ARMATURA - VUOTO</li>
+					{% endif %}
+				</ul>
+			</div>
+		</div>
+
+
+	</div>
+	<div class="row justify-content-end">
+		<div class="col-auto ms-5">
+			<div class="btn-group" role="group" id="bottoniHome">
+				<div class="btn btn-default ">
+					{% bootstrap_button "Inventario" size='large' button_type="link" href="../inventario/" %}
+				</div>
+				<div class="btn btn-default">
+					{% bootstrap_button "Battaglia" size='large' button_type="link" href="../luoghi/" %}
+				</div>
+			</div>
+		</div>
+	</div>
+
 
 </div>
+
 </body>
 </html>

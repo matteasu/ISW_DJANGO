@@ -2,6 +2,11 @@
   justify-content: flex-end;
 }
 
+#drop {
+  justify-content: flex-start;
+}
+
+
 @media (max-width: 767.98px) {
   #inventario{
     padding-top: 22rem;
@@ -10,4 +15,30 @@
   #stat{
     background: #F8F9FA;
   }
+}
+
+#bottoniHome .btn-primary{
+  font-size: 2rem;
+  background-color: #5D92C7;
+  border-color:  #5D92C7;
+}
+
+
+.card{
+  border-color: #304254 ;
+}
+
+.card-body{
+  background-color: #5D92C7;
+}
+.card-header{
+   background-color: #5D92C7;
+}
+
+body {
+  background-color: #304254;
+}
+
+.list-group-item{
+  background-color: #A8C7E6;
 }

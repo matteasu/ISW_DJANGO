@@ -6,121 +6,173 @@
 {% bootstrap_javascript %}
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Scelta Luogo di battaglia</title>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'styles.css' %}">
+	<meta charset="UTF-8">
+	<title>{{boss.nome}}</title>
+	{% load static %}
+	<link rel="stylesheet" href="{% static 'styles.css' %}">
 </head>
 <body>
-<nav class="navbar navbar-expand mb-5 bg-light navbar-light ">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="{% url 'home' %}">Home</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav  mb-2 mb-lg-0">
-                <!-- Robe nostre -->
-                {% if request.user.is_authenticated %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'inventario' %}">Inventario</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'logout' %}">Logout</a>
-                </li>
+<nav class="navbar navbar-expand navbar-light bg-light mb-5 ">
+	<div class="container-fluid">
+		<a class="navbar-brand" href="http://127.0.0.1:8000/home">Home</a>
+		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+		        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="drop">
+			<ul class="navbar-nav  mb-2 mb-lg-0">
+				<!-- Robe nostre -->
+				{% if request.user.is_admin%}
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+					   data-bs-toggle="dropdown" aria-expanded="false">
+						Strumenti Admin
+					</a>
+					<ul class="dropdown-menu " aria-labelledby="navbarDropdownMenuLink">
+						<li><a class="dropdown-item" href="http://127.0.0.1:8000/admin/struttureGioco/boss/">Aggiungi/Modifica
+							Boss</a>
+						</li>
+						<li><a class="dropdown-item" href="http://127.0.0.1:8000/admin/struttureGioco/equipaggiamento/">Aggiungi/Modifica
+							Equipaggiamento</a></li>
+						<li><a class="dropdown-item"
+						       href="http://127.0.0.1:8000/admin/struttureGioco/boss/{{boss.id}}/change">Modifica
+							{{boss.nome}}</a>
+						</li>
+					</ul>
+				</li>
+				{%endif%}
 
-                {% else %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'register' %}">Register</a>
-                </li>
 
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'login' %}">Login</a>
-                </li>
-                {% endif %}
-            </ul>
-        </div>
-    </div>
+			</ul>
+		</div>
+		<div class="collapse navbar-collapse">
+			<ul class="navbar-nav  mb-2 mb-lg-0">
+				<!-- Robe nostre -->
+
+				{% if request.user.is_authenticated %}
+				<li class="nav-item">
+					<a class="nav-link" href="{% url 'inventario' %}">Inventario</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="{% url 'logout' %}">Logout</a>
+				</li>
+				{% else %}
+				<li class="nav-item">
+					<a class="nav-link" href="{% url 'register' %}">Register</a>
+				</li>
+
+				<li class="nav-item">
+					<a class="nav-link" href="{% url 'login' %}">Login</a>
+				</li>
+				{% endif %}
+
+			</ul>
+		</div>
+	</div>
 </nav>
 <div class="container-fluid">
 
-    {% if flag %}
+	{% if flag %}
 
-    <div class="modal fade " id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-         aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    ...
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Understood</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    {%endif%}
-
-
-    <div class="row">
-        <div class="col-6 mx-auto">
-            <div class="card  border-secondary mb-3">
-
-                <div class="card-body">
-                    <div class="row">
-                        <h4 class="card-title">{{boss.nome}}</h4>
-
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <img src="../../{{boss.image.name}}" class="align-middle">
-                        </div>
-                        <div class="col ">
-
-                            <h5 class="card-text fst-italic">Statistiche:</h5>
-                            <h6 class="font-monospace card-text">VTL {{boss.vitalita }}</h6>
-                            <h6 class="font-monospace card-text">FRZ {{boss.forza }}</h6>
-                            <h6 class="font-monospace card-text">DEX {{boss.destrezza }}</h6>
-                            <h6 class="font-monospace card-text">INT {{boss.intelligenza }}</h6>
-                            <h6 class="font-monospace card-text">TMP {{boss.tempra }}</h6>
-                        </div>
-                    </div>
-                </div>
+	<div class="modal fade " id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+	     aria-labelledby="staticBackdropLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					{% if vittoria %}
+					{%if elementoGiaVinto%}
+					<h4>Hai gia {{elementoVinto.nome}} nel tuo inventario </h4>
+					{%else%}
+					<h4>{{elementoVinto.nome}}</h4>
+					<p class="card-text">VTL {{elementoVinto.vitalita}}</p>
+					<p class="card-text">FRZ {{elementoVinto.forza}}</p>
+					<p class="card-text">DEX {{elementoVinto.destrezza}}</p>
+					<p class="card-text">INT {{elementoVinto.intelligenza}}</p>
+					<p class="card-text">TMP {{elementoVinto.tempra}}</p>
+					{%endif%}
+					{%else%}
+					<h4>Hai perso :(</h4>
+					{%endif%}
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary">Understood</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	{%endif%}
 
 
-                <ul class="list-group list-group-flush">
-                    <h5 class="list-group-item">Lista dei possibili drop:</h5>
-                    {% for item in listaDrop %}
-                    <li class="list-group-item">{{item.nome}}
-                        {% if item.tipo == "A"%}
-                        <h6 class="fst-italic">Armatura</h6>
-                        {%elif item.tipo == "P"%}
-                        <h6 class="fst-italic">Arma Primaria</h6>
-                        {%else%}
-                        <h6 class="fst-italic">Arma Secondaria</h6>
-                        {% endif %}
-                    </li>
-                    {% endfor %}
-                </ul>
-                <div class="card-body align-self-center">
-                    <a class="btn-lg  btn btn-warning " href="../luoghi/">Fuggi</a>
-                    <a class=" btn-lg  btn btn-danger " href="">Combatti</a>
-                </div>
-            </div>
-        </div>
-    </div>
+	<div class="row">
+		<div class="col-6 mx-auto">
+			<div class="card  border-secondary mb-3">
+
+				<div class="card-body">
+					<div class="row">
+						<h4 class="card-title">{{boss.nome}}</h4>
+
+					</div>
+					<div class="row">
+						<div class="col">
+							<img src="../../{{boss.image.name}}" class="align-middle">
+						</div>
+						<div class="col ">
+
+							<h5 class="card-text fst-italic">Statistiche:</h5>
+							<h6 class="font-monospace card-text">VTL {{boss.vitalita }}</h6>
+							<h6 class="font-monospace card-text">FRZ {{boss.forza }}</h6>
+							<h6 class="font-monospace card-text">DEX {{boss.destrezza }}</h6>
+							<h6 class="font-monospace card-text">INT {{boss.intelligenza }}</h6>
+							<h6 class="font-monospace card-text">TMP {{boss.tempra }}</h6>
+						</div>
+					</div>
+				</div>
+
+
+				<ul class="list-group list-group-flush">
+					<h5 class="list-group-item">Lista dei possibili drop:</h5>
+					{% for item in listaDrop %}
+					<li class="list-group-item">{{item.nome}}
+						{% if item.tipo == "A"%}
+						<h6 class="fst-italic">Armatura</h6>
+						{%elif item.tipo == "P"%}
+						<h6 class="fst-italic">Arma Primaria</h6>
+						{%else%}
+						<h6 class="fst-italic">Arma Secondaria</h6>
+						{% endif %}
+					</li>
+					{% endfor %}
+				</ul>
+				<div class="card-body align-self-center">
+					<div class="row">
+						<div class="col">
+							<a class="btn-lg  btn btn-warning " href="../luoghi/">Fuggi</a>
+						</div>
+						<div class="col">
+							<form method="post" class="">
+								{% csrf_token %}
+								<input type="hidden" name="idItem" value="hehehe">
+								<button type="submit" class=" btn btn-lg btn-danger">Combatti</button>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 
 </div>
 
 <script type="text/javascript">
-    var myModal = new bootstrap.Modal(document.getElementById('staticBackdrop'))
-    myModal.show()
+	var myModal = new bootstrap.Modal(document.getElementById('staticBackdrop'))
+	myModal.show()
+
+
 </script>
 </body>
 </html>
