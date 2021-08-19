@@ -10,6 +10,7 @@
 	<title>Avventure RPG</title>
 	{% load static %}
 	<link rel="stylesheet" href="{% static './styles.css'%}">
+
 </head>
 <body>
 <nav class="navbar navbar-expand navbar-dark bg-dark mb-3 ">
@@ -86,7 +87,8 @@
 					</li>
 					<li class="list-group-item font-monospace ">FORZA {{request.user.personaggio.forza }}</li>
 					<li class="list-group-item font-monospace ">DESTREZZA {{request.user.personaggio.destrezza }}</li>
-					<li class="list-group-item font-monospace ">INTELLIGENZA {{request.user.personaggio.intelligenza}}</li>
+					<li class="list-group-item font-monospace ">INTELLIGENZA {{request.user.personaggio.intelligenza}}
+					</li>
 					<li class="list-group-item font-monospace ">TEMPRA {{request.user.personaggio.tempra }}</li>
 				</ul>
 			</div>
@@ -101,13 +103,16 @@
 				</div>
 				<ul class="list-group list-group-flush">
 					{% if request.user.personaggio.armaPrimaria is not None %}
-					<li class="list-group-item font-monospace ">ARMA PRIMARIA - {{request.user.personaggio.armaPrimaria }}</li>
+					<li class="list-group-item font-monospace ">ARMA PRIMARIA - {{request.user.personaggio.armaPrimaria}}
+					</li>
 					{% else %}
 					<li class="list-group-item font-monospace ">ARMA PRIMARIA - VUOTO</li>
 					{% endif %}
 
 					{% if request.user.personaggio.armaSecondaria is not None %}
-					<li class="list-group-item font-monospace ">ARMA SECONDARIA - {{request.user.personaggio.armaSecondaria }}</li>
+					<li class="list-group-item font-monospace ">ARMA SECONDARIA -
+						{{request.user.personaggio.armaSecondaria }}
+					</li>
 					{% else %}
 					<li class="list-group-item font-monospace ">ARMA SECONDARIA - VUOTO</li>
 					{% endif %}
