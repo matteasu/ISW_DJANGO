@@ -67,11 +67,11 @@ class Personaggio(models.Model):
 	                             related_name = '+')
 
 	vita = models.IntegerField(default = 10)
-	vitalita = models.IntegerField(default = 0)
-	forza = models.IntegerField(default = 0)
-	destrezza = models.IntegerField(default = 0)
-	intelligenza = models.IntegerField(default = 0)
-	tempra = models.IntegerField(default = 0)
+	vitalita = models.IntegerField(default = 1)
+	forza = models.IntegerField(default = 1)
+	destrezza = models.IntegerField(default = 1)
+	intelligenza = models.IntegerField(default = 1)
+	tempra = models.IntegerField(default = 1)
 	zaino = models.ManyToManyField(Equipaggiamento, through = 'Inventario')
 
 	def __str__(self):

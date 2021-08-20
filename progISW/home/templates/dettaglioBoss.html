@@ -12,7 +12,7 @@
 	<link rel="stylesheet" href="{% static 'styles.css' %}">
 </head>
 <body>
-<nav class="navbar navbar-expand navbar-light bg-light mb-5 ">
+<nav class="navbar navbar-expand navbar-dark bg-dark mb-5 ">
 	<div class="container-fluid">
 		<a class="navbar-brand" href="http://127.0.0.1:8000/home">Home</a>
 		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
@@ -79,7 +79,7 @@
 		<div class="modal-dialog modal-dialog-centered">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+					<!--<h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>-->
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
 				<div class="modal-body">
@@ -119,58 +119,89 @@
 					</div>
 					<div class="row">
 						<div class="col">
-							<img src="../../{{boss.image.name}}" class="align-middle">
+							<img src="../../{{boss.image.name}}" class="align-middle img-fluid">
 						</div>
 						<div class="col ">
-
-							<h5 class="card-text fst-italic">Statistiche:</h5>
-							<h6 class="font-monospace card-text">VTL {{boss.vitalita }}</h6>
-							<h6 class="font-monospace card-text">FRZ {{boss.forza }}</h6>
-							<h6 class="font-monospace card-text">DEX {{boss.destrezza }}</h6>
-							<h6 class="font-monospace card-text">INT {{boss.intelligenza }}</h6>
-							<h6 class="font-monospace card-text">TMP {{boss.tempra }}</h6>
+							<div class="card">
+								<div class="card-body">
+									<h5 class="font-monospace text-uppercase">Statistiche:</h5>
+								</div>
+								<ul class="list-group list-group-flush">
+									<li class="list-group-item font-monospace ">VITA {{vitaboss}}</li>
+									<li class="list-group-item font-monospace ">VITALIT&Agrave; {{boss.vitalita }}
+									</li>
+									<li class="list-group-item font-monospace ">FORZA {{boss.forza}}
+									</li>
+									<li class="list-group-item font-monospace ">DESTREZZA
+										{{request.user.personaggio.destrezza }}
+									</li>
+									<li class="list-group-item font-monospace ">INTELLIGENZA
+										{{boss.intelligenza}}
+									</li>
+									<li class="list-group-item font-monospace ">TEMPRA {{boss.tempra }}
+									</li>
+								</ul>
+							</div>
 						</div>
 					</div>
 				</div>
 
+				<div class="card-body">
 
+					<h5>Lista dei possibili drop:</h5>
+
+				</div>
 				<ul class="list-group list-group-flush">
-					<h5 class="list-group-item">Lista dei possibili drop:</h5>
-					{% for item in listaDrop %}
-					<li class="list-group-item">{{item.nome}}
-						{% if item.tipo == "A"%}
-						<h6 class="fst-italic">Armatura</h6>
-						{%elif item.tipo == "P"%}
-						<h6 class="fst-italic">Arma Primaria</h6>
-						{%else%}
-						<h6 class="fst-italic">Arma Secondaria</h6>
-						{% endif %}
-					</li>
-					{% endfor %}
+					{% if listaDrop.count == 0 %}
+						<h6 class="fst-italic text-center">NESSUN DROP. QUALCHE ADMIN NON HA FATTO IL PROPRIO DOVERE...</h6>
+
+					{% else %}
+						{% for item in listaDrop %}
+						<li class="list-group-item">{{item.nome}}
+							{% if item.tipo == "A"%}
+							<h6 class="fst-italic">Armatura</h6>
+							{%elif item.tipo == "P"%}
+							<h6 class="fst-italic">Arma Primaria</h6>
+							{%else%}
+							<h6 class="fst-italic">Arma Secondaria</h6>
+							{% endif %}
+						</li>
+						{% endfor %}
+					{% endif %}
 				</ul>
-				<div class="card-body align-self-center">
-					<div class="row">
-						<div class="col">
-							<a class="btn-lg  btn btn-warning " href="../luoghi/">Fuggi</a>
-						</div>
-						<div class="col">
-							<form method="post" class="">
-								{% csrf_token %}
-								<input type="hidden" name="idItem" value="hehehe">
-								<button type="submit" class=" btn btn-lg btn-danger">Combatti</button>
-							</form>
-						</div>
+				<div class="row mx-auto mt-2 mb-2">
+					<div class="col">
+						<a class="btn-lg  btn btn-warning " href="../luoghi/">Fuggi</a>
 					</div>
+					<div class="col">
+						<form method="post" class="" id="formCombatti">
+							{% csrf_token %}
+							<input type="hidden" name="idItem" value="hehehe">
+							{% if listaDrop.count == 0 %}
+								<button type="submit" class=" btn btn-lg btn-danger" disabled>Combatti</button>
+							{% else %}
+								<button type="submit" class=" btn btn-lg btn-danger">Combatti</button>
+							{% endif %}
+
+						</form>
+					</div>
+
 				</div>
 			</div>
 		</div>
 	</div>
+
 
 </div>
 
 <script type="text/javascript">
 	var myModal = new bootstrap.Modal(document.getElementById('staticBackdrop'))
 	myModal.show()
+
+	// codice necessario per non far rimandare il form in caso di refresh
+	if ( window.history.replaceState ) {
+        window.history.replaceState( null, null, window.location.href );
+	}
 
 
 </script>

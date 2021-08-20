@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 import random
 # Create your views here.
 from struttureGioco.models import Equipaggiamento, Boss
-from struttureGioco.funzioni import aggiungiStatistiche, rimuoviStatistiche
+from struttureGioco.funzioni import aggiungiStatistiche, rimuoviStatistiche, combattiBoss
 
 
 def homeView(request):
@@ -81,7 +81,7 @@ def luoghiView(request):
 	if not user.is_authenticated:
 		return redirect("login")
 
-	boss = Boss.objects.all()
+	boss = Boss.objects.all().filter(abilitato = True)
 	print(boss)
 	return render(request, "luoghi.html", {'listaBoss': boss})
 
@@ -92,24 +92,34 @@ def dettaglioBossView(request, nomeLuogo):
 		return redirect("login")
 	try:
 		boss = Boss.objects.get(luogo = nomeLuogo)
+		vitaboss = boss.vita * boss.vitalita
 		listaDrop = Equipaggiamento.objects.filter(boss = boss).order_by('nome')
 
 		if request.POST:
 			print("hehehehe")
 			flag = True
-			vittoria=True
+			vittoria=False
 			drop = Equipaggiamento.objects.filter(boss = boss).order_by('nome').values_list('nome', flat = True)
-			indiceElemento = random.randint(0, len(drop) - 1)
-			print(indiceElemento)
-			elementoVinto = Equipaggiamento.objects.get(nome = drop[indiceElemento])
-			print(elementoVinto)
+			try:
+				indiceElemento = random.randint(0, len(drop) - 1)
+				print(indiceElemento)
+				elementoVinto = Equipaggiamento.objects.get(nome = drop[indiceElemento])
+				print(elementoVinto)
 
-			if not user.personaggio.zaino.filter(nome=drop[indiceElemento]):
-				user.personaggio.zaino.add(elementoVinto)
-				user.personaggio.save()
-				elementoGiaVinto = False
-			else:
-				elementoGiaVinto=True
+				vittoria = combattiBoss(request.user, boss)
+
+				if not user.personaggio.zaino.filter(nome=drop[indiceElemento]) and drop != None:
+					user.personaggio.zaino.add(elementoVinto)
+					user.personaggio.save()
+					elementoGiaVinto = False
+				else:
+					elementoGiaVinto=True
+			except:
+				print("Boss no loot bad")
+				elementoGiaVinto = None
+				flag = False
+				vittoria = None
+				elementoVinto = None
 
 		else:
 			print("nonono")
@@ -123,4 +133,4 @@ def dettaglioBossView(request, nomeLuogo):
 
 	return render(request, "dettaglioBoss.html",
 	              {'boss': boss, 'listaDrop': listaDrop, 'flag': flag, 'vittoria': vittoria,
-	               'elementoVinto': elementoVinto,'elementoGiaVinto':elementoGiaVinto})
+	               'elementoVinto': elementoVinto,'elementoGiaVinto':elementoGiaVinto, 'vitaboss':vitaboss})
