@@ -84,6 +84,7 @@
 				</div>
 				<div class="modal-body">
 					{% if vittoria %}
+					<h3>Vittoria!</h3>
 					{%if elementoGiaVinto%}
 					<h4>Hai gia {{elementoVinto.nome}} nel tuo inventario </h4>
 					{%else%}
@@ -99,8 +100,7 @@
 					{%endif%}
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-					<button type="button" class="btn btn-primary">Understood</button>
+					<button type="button" class="btn btn-primary" data-bs-dismiss="modal">Indietro</button>
 				</div>
 			</div>
 		</div>
