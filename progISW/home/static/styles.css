@@ -1,52 +1,68 @@
 .navbar-collapse {
-  justify-content: flex-end;
+    justify-content: flex-end;
 }
 
 #drop {
-  justify-content: flex-start;
+    justify-content: flex-start;
+}
+
+@media (min-width: 768px) and (max-width: 992px) {
+    #stat {
+        width: fit-content;
+    }
+
+    #inventario {
+        padding-top: 55rem;
+         margin-left: .50rem !important;
+
+    }
 }
 
 
 @media (max-width: 767.98px) {
-  #inventario{
-    padding-top: 30rem;
-  }
+    #inventario {
+        padding-top: 35rem;
+        margin-left: .25rem !important;
 
-  #stat{
-    background: #304254;
-  }
+    }
+
+    #stat {
+        background-color: #304254;
+    }
 }
 
-#bottoniHome .btn-primary{
-  font-size: 2rem;
-  background-color: #5D92C7;
-  border-color:  #5D92C7;
+#bottoniHome .btn-primary {
+    font-size: 2rem;
+    background-color: #5D92C7;
+    border-color: #5D92C7;
 }
 
-.btn-primary{
-  background-color: #5D92C7;
-  border-color:  #5D92C7;
+
+.card {
+    border-color: #304254 !important;;
 }
 
-.card{
-  border-color: #304254 ;
+.card-body {
+    background-color: #5D92C7;
 }
 
-.card-body{
-  background-color: #5D92C7;
+.card-header {
+    background-color: #5D92C7;
 }
-.card-header{
-   background-color: #5D92C7;
+
+body {
+    background-color: #304254;
+}
+
+.list-group-item {
+    background-color: #A8C7E6;
 }
 
 .card-footer{
   background-color: #A8C7E6;
 }
 
-body {
-  background-color: #304254;
-}
-
-.list-group-item{
-  background-color: #A8C7E6;
+.btn-primary{
+  background-color: #5D92C7;
+  border-color:  #5D92C7;
 }
