@@ -6,154 +6,176 @@
 {% bootstrap_javascript %}
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>Inventario</title>
-	{% load static %}
-	<link rel="stylesheet" href="{% static 'styles.css' %}">
+    <meta charset="UTF-8">
+    <title>Inventario</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
 </head>
 <body>
-<nav class="navbar navbar-expand navbar-light fixed-top mb-5 bg-light ">
-	<div class="container-fluid">
-		<a class="navbar-brand" href="../home">Home</a>
-		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-		        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-			<span class="navbar-toggler-icon"></span>
-		</button>
-		<div class="collapse navbar-collapse" id="drop">
-			<ul class="navbar-nav  mb-2 mb-lg-0">
-				<!-- Robe nostre -->
-				{% if request.user.is_admin%}
-				<li class="nav-item dropdown" id="myDropdown">
-					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
-					   data-bs-toggle="dropdown" aria-expanded="false">
-						Strumenti Admin
-					</a>
-					<ul class="dropdown-menu " aria-labelledby="navbarDropdownMenuLink">
-						<li><a class="dropdown-item" href="http://127.0.0.1:8000/admin/struttureGioco/boss/">Aggiungi/Modifica
-							Boss</a>
-						</li>
-						<li><a class="dropdown-item" href="http://127.0.0.1:8000/admin/struttureGioco/equipaggiamento/">Aggiungi/Modifica
-							Equipaggiamento</a></li>
+<nav class="navbar navbar-expand navbar-dark fixed-top mb-5 bg-dark ">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="../home">Home</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="drop">
+            <ul class="navbar-nav  mb-2 mb-lg-0">
+                <!-- Robe nostre -->
+                {% if request.user.is_admin%}
+                <li class="nav-item dropdown" id="myDropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                       data-bs-toggle="dropdown" aria-expanded="false">
+                        Strumenti Admin
+                    </a>
+                    <ul class="dropdown-menu " aria-labelledby="navbarDropdownMenuLink">
+                        <li><a class="dropdown-item" href="http://127.0.0.1:8000/admin/struttureGioco/boss/">Aggiungi/Modifica
+                            Boss</a>
+                        </li>
+                        <li><a class="dropdown-item" href="http://127.0.0.1:8000/admin/struttureGioco/equipaggiamento/">Aggiungi/Modifica
+                            Equipaggiamento</a></li>
 
-					</ul>
-				</li>
-				{%endif%}
+                    </ul>
+                </li>
+                {%endif%}
 
+            </ul>
+        </div>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav  mb-2 mb-lg-0">
+                <!-- Robe nostre -->
+                {% if request.user.is_authenticated %}
 
-			</ul>
-		</div>
-		<div class="collapse navbar-collapse">
-			<ul class="navbar-nav  mb-2 mb-lg-0">
-				<!-- Robe nostre -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'register' %}">Register</a>
+                </li>
 
-				{% if request.user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'login' %}">Login</a>
+                </li>
+                {% endif %}
 
-				<li class="nav-item">
-					<a class="nav-link" href="{% url 'logout' %}">Logout</a>
-				</li>
-				{% else %}
-				<li class="nav-item">
-					<a class="nav-link" href="{% url 'register' %}">Register</a>
-				</li>
-
-				<li class="nav-item">
-					<a class="nav-link" href="{% url 'login' %}">Login</a>
-				</li>
-				{% endif %}
-
-			</ul>
-		</div>
-	</div>
+            </ul>
+        </div>
+    </div>
 </nav>
 <div class="container-fluid">
 
-	<div class="row pt-5">
-		<div class="col-lg-3 ms-1 fixed-top mt-5 pt-3 " id="stat">
-			<h4 class="font-monospace">PERSONAGGIO: {{request.user.personaggio.nome }}</h4>
-			<h6 class="font-monospace">VIT {{vitaEffettiva}}</h6>
-			<h6 class="font-monospace">VTL {{request.user.personaggio.vitalita }}</h6>
-			<h6 class="font-monospace">FRZ {{request.user.personaggio.forza }}</h6>
-			<h6 class="font-monospace">DEX {{request.user.personaggio.destrezza }}</h6>
-			<h6 class="font-monospace">INT {{request.user.personaggio.intelligenza }}</h6>
-			<h6 class="font-monospace">TMP {{request.user.personaggio.tempra }}</h6>
-			<h4 class="font-monospace mt-5">EQUIPAGGIAMENTO</h4>
-			{% if request.user.personaggio.armaPrimaria is not None %}
-			<h6 class="font-monospace">PRIMARIA - {{request.user.personaggio.armaPrimaria }}</h6>
-			{% else %}
-			<h6 class="font-monospace">PRIMARIA - VUOTO</h6>
-			{% endif %}
+    <div class="row pt-5">
+        <div class="col-lg-3 ms-1 fixed-top mt-5 pt-5 " id="stat">
+            <div class ="card">
+                <div class ="card-header">
+                    <h5 class="font-monospace">{{request.user.personaggio.nome }}</h5>
+                </div>
+                <div class ="card-body">
+                    <h5 class="font-monospace text-uppercase">Statistiche:</h5>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item font-monospace ">VITA {{vitaEffettiva}}</li>
+                    <li class="list-group-item font-monospace ">VITALIT&Agrave; {{request.user.personaggio.vitalita }}</li>
+					<li class="list-group-item font-monospace ">FORZA {{request.user.personaggio.forza }}</li>
+					<li class="list-group-item font-monospace ">DESTREZZA {{request.user.personaggio.destrezza }}</li>
+					<li class="list-group-item font-monospace ">INTELLIGENZA {{request.user.personaggio.intelligenza}}</li>
+					<li class="list-group-item font-monospace ">TEMPRA {{request.user.personaggio.tempra }}</li>
+                </ul>
 
-			{% if request.user.personaggio.armaSecondaria is not None %}
-			<h6 class="font-monospace">SECONDARIA - {{request.user.personaggio.armaSecondaria }}</h6>
-			{% else %}
-			<h6 class="font-monospace">SECONDARIA - VUOTO</h6>
-			{% endif %}
+                <div class="card-header">
+                        <h5 class="font-monospace">EQUIPAGGIAMENTO</h5>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                         {% if request.user.personaggio.armaPrimaria is not None %}
+                        <li class="list-group-item font-monospace ">PRIMARIA - {{request.user.personaggio.armaPrimaria }}</li>
+                        {% else %}
+                        <li class="list-group-item font-monospace ">PRIMARIA - VUOTO</li>
+                        {% endif %}
 
-			{% if request.user.personaggio.armatura is not None %}
-			<h6 class="font-monospace">ARMATURA - {{request.user.personaggio.armatura }}</h6>
-			{% else %}
-			<h6 class="font-monospace">ARMATURA - VUOTO</h6>
-			{% endif %}
+                        {% if request.user.personaggio.armaSecondaria is not None %}
+                        <li class="list-group-item font-monospace ">SECONDARIA - {{request.user.personaggio.armaSecondaria }}</li>
+                        {% else %}
+                        <li class="list-group-item font-monospace ">SECONDARIA - VUOTO</li>
+                        {% endif %}
 
-		</div>
+                        {% if request.user.personaggio.armatura is not None %}
+                        <li class="list-group-item font-monospace ">ARMATURA - {{request.user.personaggio.armatura }}</li>
+                        {% else %}
+                        <li class="list-group-item font-monospace ">ARMATURA - VUOTO</li>
+                        {% endif %}
+                    </ul>
+            </div>
 
-		<div class="col offset-md-6 mt-5 mb-3" id="inventario">
-			{%if zaino is None %}
-			<h4>Inventario Vuoto</h4>
-			{% endif %}
-			<div class="row row-cols-sm-1 row-cols-lg-2 row-cols-xl-3 g-4">
-				{% for item in zaino %}
-				<div class="col">
-					<div class="card h-100">
-						<div class="card-body">
-							<h5 class="card-title">{{item.nome}}</h5>
-							{% if item.tipo == "P"%}
-							<p class="card-text fst-italic">Arma Primaria</p>
-							{% elif item.tipo == "S"%}
-							<p class="card-text fst-italic">Arma Secondaria</p>
-							{% else %}
-							<p class="card-text fst-italic">Armatura</p>
-							{% endif %}
-							<p class="card-text">VTL {{item.vitalita}}</p>
-							<p class="card-text">FRZ {{item.forza}}</p>
-							<p class="card-text">DEX {{item.destrezza}}</p>
-							<p class="card-text">INT {{item.intelligenza}}</p>
-							<p class="card-text">TMP {{item.tempra}}</p>
-						</div>
 
-						<div class="card-footer text-center">
-							<!-- l'if va tenuto su una sola riga altrimenti da errore ATTENTI A QUANDO FATE CTRL+ALT+L -->
-							{% if item != request.user.personaggio.armaPrimaria and item != request.user.personaggio.armaSecondaria and item != request.user.personaggio.armatura %}
-							<form method="post" >
-								{% csrf_token %}
-								<input type="hidden" name="idItem" value="{{item.id}}">
-								<button type="submit" class=" btn btn-primary">Equipaggia</button>
-							</form>
-							{% else %}
-							{% bootstrap_button "Equipaggiata" button_class="disabled" %}
-							{% endif %}
-						</div>
-					</div>
-				</div>
-				{% endfor %}
-			</div>
-		</div>
 
-	</div>
+        </div>
+
+        <div class="col offset-md-6 mt-5 mb-3" id="inventario">
+            {%if zaino is None %}
+            <h4>Inventario Vuoto</h4>
+            {% endif %}
+            <div class="row row-cols-sm-1 row-cols-lg-2 row-cols-xl-3 g-4">
+                {% for item in zaino %}
+                <div class="col">
+                    <div class="card h-100">
+                        <div class = "card-header">
+                             <h5 class="card-title font-monospace">{{item.nome}}</h5>
+                        </div>
+                        <div class="card-body">
+                            {% if item.tipo == "P"%}
+                            <p class="card-text fst-italic">Arma Primaria</p>
+                            {% elif item.tipo == "S"%}
+                            <p class="card-text fst-italic">Arma Secondaria</p>
+                            {% else %}
+                            <p class="card-text fst-italic">Armatura</p>
+                            {% endif %}
+                        </div>
+                        <ul class ="list-group list-group-flush">
+                            <li class="list-group-item font-monospace ">VTL {{item.vitalita}}</li>
+                            <li class="list-group-item font-monospace ">FRZ {{item.forza}}</li>
+                            <li class="list-group-item font-monospace ">DEX {{item.destrezza}}</li>
+                            <li class="list-group-item font-monospace ">INT {{item.intelligenza}}</li>
+                            <li class="list-group-item font-monospace ">TMP {{item.tempra}}</li>
+                        </ul>
+                        <div class="card-footer text-center">
+                            <!-- l'if va tenuto su una sola riga altrimenti da errore ATTENTI A QUANDO FATE CTRL+ALT+L -->
+                            {% if item != request.user.personaggio.armaPrimaria and item != request.user.personaggio.armaSecondaria and item != request.user.personaggio.armatura %}
+                            <form method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="idItem" value="{{item.id}}">
+                                <button  style= "background-color: #5D92C7; border-color: #5D92C7" type="submit" class=" btn btn-primary">Equipaggia</button>
+                            </form>
+                            {% else %}
+                            {% bootstrap_button "Equipaggiata" button_class="disabled" %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
 
 
 </div>
 <script>
-	var myDropdown = document.getElementById('myDropdown')
-	var statistiche = document.getElementById('stat')
-	myDropdown.addEventListener('show.bs.dropdown', function () {
-		myDropdown.style.zIndex="1";
-		statistiche.style.zIndex="0";
-	})
-	myDropdown.addEventListener('hidden.bs.dropdown',function (){
-		myDropdown.style.zIndex=null;
-		statistiche.style.zIndex=null;
-	})
+    var myDropdown = document.getElementById('myDropdown')
+    var statistiche = document.getElementById('stat')
+    myDropdown.addEventListener('show.bs.dropdown', function () {
+        myDropdown.style.zIndex = "1";
+        statistiche.style.zIndex = "0";
+    })
+    myDropdown.addEventListener('hidden.bs.dropdown', function () {
+        myDropdown.style.zIndex = null;
+        statistiche.style.zIndex = null;
+    })
+
+    // codice necessario per non far rimandare il form in caso di refresh
+	if ( window.history.replaceState ) {
+        window.history.replaceState( null, null, window.location.href );
+	}
 </script>
 </body>
 </html>
