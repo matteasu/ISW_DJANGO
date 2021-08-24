@@ -1,8 +1,11 @@
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 import random
 # Create your views here.
+from django.urls import reverse
+
 from struttureGioco.models import Equipaggiamento, Boss
-from struttureGioco.funzioni import aggiungiStatistiche, rimuoviStatistiche, combattiBoss
+from struttureGioco.funzioni import combattiBoss, modificaEquip
 
 
 def homeView(request):
@@ -24,35 +27,8 @@ def inventarioView(request):
 	if not user.is_authenticated:
 		return redirect("login")
 	if request.POST:
-
 		itemID = request.POST.get("idItem")
-		item = Equipaggiamento.objects.get(pk = itemID)
-		if item.tipo == "P":
-			# controllo che il personaggio abbia equipaggiata un'arma primaria
-			if user.personaggio.armaPrimaria is not None:
-				primariaAttuale = Equipaggiamento.objects.get(nome = user.personaggio.armaPrimaria)
-				rimuoviStatistiche(user, primariaAttuale)
-			# assegno il nuovo equipaggiamento
-			user.personaggio.armaPrimaria = item
-			aggiungiStatistiche(user, item)
-		# user.personaggio.save()
-		elif item.tipo == "S":
-			# controllo che il personaggio abbia equipaggiata un'arma secondaria
-			if user.personaggio.armaSecondaria is not None:
-				secondariaAttuale = Equipaggiamento.objects.get(nome = user.personaggio.armaSecondaria)
-				rimuoviStatistiche(user, secondariaAttuale)
-			# assegno il nuovo equipaggiamento
-			user.personaggio.armaSecondaria = item
-			aggiungiStatistiche(user, item)
-
-		else:
-			# controllo che il personaggio abbia equipaggiata un'armatura
-			if user.personaggio.armatura is not None:
-				armaturaAttuale = Equipaggiamento.objects.get(nome = user.personaggio.armatura)
-				rimuoviStatistiche(user, armaturaAttuale)
-			# assegno il nuovo equipaggiamento
-			user.personaggio.armatura = item
-			aggiungiStatistiche(user, item)
+		modificaEquip(user, itemID)
 
 	# aggiornamento statistiche personaggio per ogni equipaggiamento
 
@@ -97,8 +73,9 @@ def dettaglioBossView(request, nomeLuogo):
 
 		if request.POST:
 			print("hehehehe")
+
 			flag = True
-			vittoria=False
+			vittoria = False
 			drop = Equipaggiamento.objects.filter(boss = boss).order_by('nome').values_list('nome', flat = True)
 			try:
 				indiceElemento = random.randint(0, len(drop) - 1)
@@ -108,12 +85,12 @@ def dettaglioBossView(request, nomeLuogo):
 
 				vittoria = combattiBoss(request.user, boss)
 
-				if not user.personaggio.zaino.filter(nome=drop[indiceElemento]) and drop != None:
+				if not user.personaggio.zaino.filter(nome = drop[indiceElemento]) and drop != None:
 					user.personaggio.zaino.add(elementoVinto)
 					user.personaggio.save()
 					elementoGiaVinto = False
 				else:
-					elementoGiaVinto=True
+					elementoGiaVinto = True
 			except:
 				print("Boss no loot bad")
 				elementoGiaVinto = None
@@ -128,9 +105,11 @@ def dettaglioBossView(request, nomeLuogo):
 			vittoria = None
 			elementoVinto = None
 
+
+
 	except Boss.DoesNotExist:
 		return redirect("luoghi")
 
 	return render(request, "dettaglioBoss.html",
 	              {'boss': boss, 'listaDrop': listaDrop, 'flag': flag, 'vittoria': vittoria,
-	               'elementoVinto': elementoVinto,'elementoGiaVinto':elementoGiaVinto, 'vitaboss':vitaboss})
+	               'elementoVinto': elementoVinto, 'elementoGiaVinto': elementoGiaVinto, 'vitaboss': vitaboss})
