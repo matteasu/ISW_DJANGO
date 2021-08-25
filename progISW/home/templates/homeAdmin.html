@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+{% load bootstrap5 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Avventure RPG</title>
+	{% load static %}
+	<link rel="stylesheet" href="{% static './styles.css'%}">
+
+</head>
+<body>
+<nav class="navbar navbar-expand navbar-dark bg-dark mb-3 ">
+	<div class="container-fluid">
+		<a class="navbar-brand" href="#">Home</a>
+		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+		        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="drop">
+			<ul class="navbar-nav  mb-2 mb-lg-0">
+				<!-- Robe nostre -->
+				{% if request.user.is_admin%}
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+					   data-bs-toggle="dropdown" aria-expanded="false">
+						Strumenti Admin
+					</a>
+					<ul class="dropdown-menu " aria-labelledby="navbarDropdownMenuLink">
+						<li><a class="dropdown-item" target="_blank"
+						       href="http://127.0.0.1:8000/admin/struttureGioco/boss/add">Aggiungi Boss</a>
+						</li>
+						<li><a class="dropdown-item" target="_blank"
+						       href="http://127.0.0.1:8000/admin/struttureGioco/equipaggiamento/add">Aggiungi
+							Equipaggiamento</a></li>
+
+					</ul>
+				</li>
+				{%endif%}
+
+
+			</ul>
+		</div>
+		<div class="collapse navbar-collapse">
+			<ul class="navbar-nav  mb-2 mb-lg-0">
+				<!-- Robe nostre -->
+
+
+				<li class="nav-item">
+					<a class="nav-link" href="{% url 'logout' %}">Logout</a>
+				</li>
+
+
+			</ul>
+		</div>
+	</div>
+</nav>
+<div class="container-fluid ">
+	<div class="row ms-1">
+		<h3 class="text-white font-monospace">Equipaggiamenti</h3>
+		<div class="col mt-3">
+
+			<div class="row row-cols-sm-2 row-cols-lg-4 row-cols-xl-6  g-4">
+				{% for item in equip %}
+				<div class="col">
+					<div class="card h-100">
+						<div class="card-header">
+							<h5 class="card-title font-monospace">{{item.nome}}</h5>
+						</div>
+						<div class="card-body">
+							{% if item.tipo == "P"%}
+							<p class="card-text fst-italic">Arma Primaria</p>
+							{% elif item.tipo == "S"%}
+							<p class="card-text fst-italic">Arma Secondaria</p>
+							{% else %}
+							<p class="card-text fst-italic">Armatura</p>
+							{% endif %}
+							<p class="card-text font-monospace">Boss: {{item.boss}}</p>
+						</div>
+						<ul class="list-group list-group-flush">
+							<li class="list-group-item font-monospace ">VTL {{item.vitalita}}</li>
+							<li class="list-group-item font-monospace ">FRZ {{item.forza}}</li>
+							<li class="list-group-item font-monospace ">DEX {{item.destrezza}}</li>
+							<li class="list-group-item font-monospace ">INT {{item.intelligenza}}</li>
+							<li class="list-group-item font-monospace ">TMP {{item.tempra}}</li>
+						</ul>
+						<div class="card-footer text-center">
+							<a class="btn btn-primary"
+							   href="http://127.0.0.1:8000/admin/struttureGioco/equipaggiamento/{{item.id}}/change">Modifica</a>
+						</div>
+
+					</div>
+				</div>
+				{%endfor%}
+			</div>
+		</div>
+	</div>
+	<div class="row ms-1 mt-3">
+		<h3 class="text-white font-monospace">Boss</h3>
+		<div class="col mt-3">
+			<div class="row row-cols-sm-2 row-cols-lg-4 row-cols-xl-6  g-4">
+				{% for b in bossDrop %}
+				<div class="col">
+					<div class="card ">
+						<div class="card-header">
+							<h5 class="card-title font-monospace">{{b.boss.nome}}</h5>
+						</div>
+						<div class="card-body">
+							<p class="card-text font-monospace">Luogo: {{b.boss.luogo}}</p>
+						</div>
+						<ul class="list-group list-group-flush">
+							<li class="list-group-item font-monospace ">VTL {{b.boss.vitalita}}</li>
+							<li class="list-group-item font-monospace ">FRZ {{b.boss.forza}}</li>
+							<li class="list-group-item font-monospace ">DEX {{b.boss.destrezza}}</li>
+							<li class="list-group-item font-monospace ">INT {{b.boss.intelligenza}}</li>
+							<li class="list-group-item font-monospace ">TMP {{b.boss.tempra}}</li>
+						</ul>
+						{%if b.drop is not None%}
+						<ul class="list-group list-group-flush">
+							{% for d in b.drop%}
+							<li class="list-group-item font-monospace ">{{d.nome}}</li>
+							{%endfor%}
+						</ul>
+						{%endif%}
+						<div class="card-footer text-center">
+							<a class="btn btn-primary"
+							   href="http://127.0.0.1:8000/admin/struttureGioco/boss/{{b.boss.id}}/change">Modifica</a>
+						</div>
+
+					</div>
+				</div>
+				{%endfor%}
+			</div>
+
+		</div>
+	</div>
+</div>
+</body>
+</html>

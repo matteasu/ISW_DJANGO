@@ -41,6 +41,7 @@ class Boss(models.Model):
 	def filename(self):
 		return os.path.basename(self.file.name)
 
+
 class Equipaggiamento(models.Model):
 	nome = models.CharField(max_length = 50, unique = True)
 	tipo = models.CharField(max_length = 1, choices = TIPOEQUIPAGGIAMENTO, null = True)

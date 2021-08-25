@@ -1,4 +1,3 @@
-
 from django.core.exceptions import ValidationError
 from django.test import TestCase, Client
 from account.forms import LoginForm
@@ -10,7 +9,7 @@ import unittest
 # Tutte le funzioni di test devono iniziare con test_<qualcosa>
 class AccountTest(TestCase):
 	def setUp(self):
-		self.client=Client()
+		self.client = Client()
 		self.account = Account.objects.create_user(playerID = 'NinoNino', password = 'Paramedico234')
 		self.superAccount = Account.objects.create_superuser(playerID = "Asu", password = "Fantastico123")
 

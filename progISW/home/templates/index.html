@@ -47,20 +47,11 @@
 			<ul class="navbar-nav  mb-2 mb-lg-0">
 				<!-- Robe nostre -->
 
-				{% if request.user.is_authenticated %}
 
 				<li class="nav-item">
 					<a class="nav-link" href="{% url 'logout' %}">Logout</a>
 				</li>
-				{% else %}
-				<li class="nav-item">
-					<a class="nav-link" href="{% url 'register' %}">Register</a>
-				</li>
 
-				<li class="nav-item">
-					<a class="nav-link" href="{% url 'login' %}">Login</a>
-				</li>
-				{% endif %}
 
 			</ul>
 		</div>
@@ -103,7 +94,8 @@
 				</div>
 				<ul class="list-group list-group-flush">
 					{% if request.user.personaggio.armaPrimaria is not None %}
-					<li class="list-group-item font-monospace ">ARMA PRIMARIA - {{request.user.personaggio.armaPrimaria}}
+					<li class="list-group-item font-monospace ">ARMA PRIMARIA -
+						{{request.user.personaggio.armaPrimaria}}
 					</li>
 					{% else %}
 					<li class="list-group-item font-monospace ">ARMA PRIMARIA - VUOTO</li>

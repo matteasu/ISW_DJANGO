@@ -13,13 +13,27 @@ def homeView(request):
 	if not user.is_authenticated:
 		return redirect("login")
 
-	if user.personaggio.vitalita > 0:
-		vitaEffettiva = user.personaggio.vita * user.personaggio.vitalita
+	if user.is_admin:
+		pag = "homeAdmin.html"
+		equip = Equipaggiamento.objects.all()
+		boss = Boss.objects.all()
+		bossDrop = []
+		for b in boss:
+			bossDrop.append({
+				'boss': b,
+				'drop': Equipaggiamento.objects.filter(boss = b).order_by('nome')
+			})
+		context = {'equip': equip, 'bossDrop': bossDrop}
 	else:
-		vitaEffettiva = user.personaggio.vita
+		if user.personaggio.vitalita > 0:
+			vitaEffettiva = user.personaggio.vita * user.personaggio.vitalita
+		else:
+			vitaEffettiva = user.personaggio.vita
 
-	user.personaggio.save()
-	return render(request, "index.html", {'vitaEffettiva': vitaEffettiva})
+		user.personaggio.save()
+		context = {'vitaEffettiva': vitaEffettiva}
+		pag = "index.html"
+	return render(request, pag, context)
 
 
 def inventarioView(request):

@@ -49,22 +49,14 @@
 			<ul class="navbar-nav  mb-2 mb-lg-0">
 				<!-- Robe nostre -->
 
-				{% if request.user.is_authenticated %}
+
 				<li class="nav-item">
 					<a class="nav-link" href="{% url 'inventario' %}">Inventario</a>
 				</li>
 				<li class="nav-item">
 					<a class="nav-link" href="{% url 'logout' %}">Logout</a>
 				</li>
-				{% else %}
-				<li class="nav-item">
-					<a class="nav-link" href="{% url 'register' %}">Register</a>
-				</li>
 
-				<li class="nav-item">
-					<a class="nav-link" href="{% url 'login' %}">Login</a>
-				</li>
-				{% endif %}
 
 			</ul>
 		</div>
@@ -119,10 +111,11 @@
 					</div>
 					<div class="row">
 						<div class="col">
-							<img src="../../{{boss.image.name}}" class="align-middle img-fluid">
+							<img src="../../{{boss.image.name}}" alt="immagine {{boss.nome}}"
+							     class="align-middle img-fluid">
 						</div>
 						<div class="col ">
-							<div class="card" >
+							<div class="card">
 								<div class="card-body">
 									<h5 class="font-monospace text-uppercase">Statistiche:</h5>
 								</div>
@@ -151,25 +144,25 @@
 					<h5>Lista dei possibili drop:</h5>
 
 				</div>
+				{% if listaDrop.count == 0 %}
+				<h6 class="fst-italic text-center">NESSUN DROP. QUALCHE ADMIN NON HA FATTO IL PROPRIO DOVERE...</h6>
+				{% else %}
 				<ul class="list-group list-group-flush">
-					{% if listaDrop.count == 0 %}
-						<h6 class="fst-italic text-center">NESSUN DROP. QUALCHE ADMIN NON HA FATTO IL PROPRIO DOVERE...</h6>
+					{% for item in listaDrop %}
+					<li class="list-group-item">{{item.nome}}
+						{% if item.tipo == "A"%}
+						<h6 class="fst-italic">Armatura</h6>
+						{%elif item.tipo == "P"%}
+						<h6 class="fst-italic">Arma Primaria</h6>
+						{%else%}
+						<h6 class="fst-italic">Arma Secondaria</h6>
+						{% endif %}
+					</li>
+					{% endfor %}
 
-					{% else %}
-						{% for item in listaDrop %}
-						<li class="list-group-item">{{item.nome}}
-							{% if item.tipo == "A"%}
-							<h6 class="fst-italic">Armatura</h6>
-							{%elif item.tipo == "P"%}
-							<h6 class="fst-italic">Arma Primaria</h6>
-							{%else%}
-							<h6 class="fst-italic">Arma Secondaria</h6>
-							{% endif %}
-						</li>
-						{% endfor %}
-					{% endif %}
 				</ul>
-				<div class="row mx-auto mt-2 mb-2" >
+				{% endif %}
+				<div class="row mx-auto mt-2 mb-2">
 					<div class="col">
 						<a class="btn-lg  btn btn-warning " href="../luoghi/">Fuggi</a>
 					</div>
@@ -178,9 +171,9 @@
 							{% csrf_token %}
 							<input type="hidden" name="idItem" value="hehehe">
 							{% if listaDrop.count == 0 %}
-								<button type="submit" class=" btn btn-lg btn-danger" disabled>Combatti</button>
+							<button type="submit" class=" btn btn-lg btn-danger" disabled>Combatti</button>
 							{% else %}
-								<button type="submit" class=" btn btn-lg btn-danger">Combatti</button>
+							<button type="submit" class=" btn btn-lg btn-danger">Combatti</button>
 							{% endif %}
 
 						</form>
@@ -195,12 +188,12 @@
 </div>
 
 <script type="text/javascript">
-	var myModal = new bootstrap.Modal(document.getElementById('staticBackdrop'))
+	const myModal = new bootstrap.Modal(document.getElementById('staticBackdrop'))
 	myModal.show()
 
 	// codice necessario per non far rimandare il form in caso di refresh
-	if ( window.history.replaceState ) {
-        window.history.replaceState( null, null, window.location.href );
+	if (window.history.replaceState) {
+		window.history.replaceState(null, null, window.location.href);
 	}
 
 
