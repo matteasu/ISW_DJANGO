@@ -5,7 +5,7 @@ import random
 from django.urls import reverse
 
 from struttureGioco.models import Equipaggiamento, Boss
-from struttureGioco.funzioni import combattiBoss, modificaEquip
+from struttureGioco.funzioni import combattiBoss, modificaEquip, sceltaDrop
 
 
 def homeView(request):
@@ -54,6 +54,7 @@ def inventarioView(request):
 
 def luoghiView(request):
 	user = request.user
+
 	if not user.is_authenticated:
 		return redirect("login")
 
@@ -64,6 +65,10 @@ def luoghiView(request):
 
 def dettaglioBossView(request, nomeLuogo):
 	user = request.user
+
+	elementoVinto = None
+	elementoGiaVinto = None
+
 	if not user.is_authenticated:
 		return redirect("login")
 	try:
@@ -76,21 +81,17 @@ def dettaglioBossView(request, nomeLuogo):
 
 			flag = True
 			vittoria = False
-			drop = Equipaggiamento.objects.filter(boss = boss).order_by('nome').values_list('nome', flat = True)
 			try:
-				indiceElemento = random.randint(0, len(drop) - 1)
-				print(indiceElemento)
-				elementoVinto = Equipaggiamento.objects.get(nome = drop[indiceElemento])
-				print(elementoVinto)
-
 				vittoria = combattiBoss(request.user, boss)
-
-				if not user.personaggio.zaino.filter(nome = drop[indiceElemento]) and drop != None:
-					user.personaggio.zaino.add(elementoVinto)
-					user.personaggio.save()
-					elementoGiaVinto = False
-				else:
-					elementoGiaVinto = True
+				print(vittoria)
+				if vittoria:
+					elementoVinto = sceltaDrop(boss)
+					if not user.personaggio.zaino.filter(nome = elementoVinto.nome):
+						user.personaggio.zaino.add(elementoVinto)
+						user.personaggio.save()
+						elementoGiaVinto = False
+					else:
+						elementoGiaVinto = True
 			except:
 				print("Boss no loot bad")
 				elementoGiaVinto = None
