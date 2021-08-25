@@ -19,7 +19,7 @@ class StruttureGiocoTest(TestCase):
 		self.account.save()
 		self.equipaggiamento1 = Equipaggiamento(nome="Lama Lama Lama", tipo='P')
 		self.equipaggiamento2 = Equipaggiamento(nome="Col Tel Lo", tipo='S')
-		self.equipaggiamento3 = Equipaggiamento(nome="pugnale", tipo='S')
+
 
 		self.equipaggiamento1.save()
 		self.equipaggiamento2.save()
@@ -78,7 +78,8 @@ class StruttureGiocoTest(TestCase):
 		self.equipaggiamento1.save()
 		self.equipaggiamento2.save()
 
-		drop = sceltaDrop(self.boss)
+		self.equipaggiamento3 = Equipaggiamento(nome="Pug Na Le", tipo='S')
+		self.equipaggiamento3.save()
 
 		self.assertNotIn(self.equipaggiamento3, Equipaggiamento.objects.filter(boss=self.boss))
 
