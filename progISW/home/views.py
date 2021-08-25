@@ -10,6 +10,7 @@ from struttureGioco.funzioni import combattiBoss, modificaEquip, sceltaDrop
 
 def homeView(request):
 	user = request.user
+	context = {}
 	if not user.is_authenticated:
 		return redirect("login")
 
@@ -38,6 +39,11 @@ def homeView(request):
 
 def inventarioView(request):
 	user = request.user
+	context = {}
+
+	if not user.is_authenticated:
+		return redirect("login")
+
 	if not user.is_authenticated:
 		return redirect("login")
 	if request.POST:
@@ -53,78 +59,65 @@ def inventarioView(request):
 
 	user.personaggio.save()
 
-	if not user.is_authenticated:
-		return redirect("login")
-
 	if user.personaggio.zaino.all():
 		zaino = user.personaggio.zaino.all()
 	else:
 		zaino = None
 
-	print(zaino)
+	context = {'zaino': zaino, 'vitaEffettiva': vitaEffettiva}
 
-	return render(request, "inventario.html", {'zaino': zaino, 'vitaEffettiva': vitaEffettiva})
+	return render(request, "inventario.html", context)
 
 
 def luoghiView(request):
 	user = request.user
-
+	context = {}
 	if not user.is_authenticated:
 		return redirect("login")
 
 	boss = Boss.objects.all().filter(abilitato = True)
+
+	context = {'listaBoss': boss}
+
 	print(boss)
-	return render(request, "luoghi.html", {'listaBoss': boss})
+	return render(request, "luoghi.html", context)
 
 
 def dettaglioBossView(request, nomeLuogo):
 	user = request.user
 
-	elementoVinto = None
-	elementoGiaVinto = None
+	context = {'elementoVinto': None, 'elementoGiaVinto': None, 'vittoria': None, 'flag': False}
 
 	if not user.is_authenticated:
 		return redirect("login")
 	try:
 		boss = Boss.objects.get(luogo = nomeLuogo)
-		vitaboss = boss.vita * boss.vitalita
-		listaDrop = Equipaggiamento.objects.filter(boss = boss).order_by('nome')
+		context['boss'] = boss
+		context['vitaboss'] = boss.vita * boss.vitalita
+		context['listaDrop'] = Equipaggiamento.objects.filter(boss = boss).order_by('nome')
 
 		if request.POST:
 			print("hehehehe")
+			context['flag'] = True
+			context['vittoria'] = False
 
-			flag = True
-			vittoria = False
-			try:
-				vittoria = combattiBoss(request.user, boss)
-				print(vittoria)
-				if vittoria:
-					elementoVinto = sceltaDrop(boss)
-					if not user.personaggio.zaino.filter(nome = elementoVinto.nome):
-						user.personaggio.zaino.add(elementoVinto)
-						user.personaggio.save()
-						elementoGiaVinto = False
-					else:
-						elementoGiaVinto = True
-			except:
-				print("Boss no loot bad")
-				elementoGiaVinto = None
-				flag = False
-				vittoria = None
-				elementoVinto = None
+			vittoria = combattiBoss(request.user, boss)
+			context['vittoria'] = vittoria
+			print(vittoria)
+			if vittoria:
+				elementoVinto = sceltaDrop(boss)
+				context['elementoVinto'] = elementoVinto
+				if not user.personaggio.zaino.filter(nome = elementoVinto.nome):
+					user.personaggio.zaino.add(elementoVinto)
+					user.personaggio.save()
+					context['elementoGiaVinto'] = False
+				else:
+					context['elementoGiaVinto'] = True
 
 		else:
 			print("nonono")
-			elementoGiaVinto = None
-			flag = False
-			vittoria = None
-			elementoVinto = None
-
-
 
 	except Boss.DoesNotExist:
 		return redirect("luoghi")
 
-	return render(request, "dettaglioBoss.html",
-	              {'boss': boss, 'listaDrop': listaDrop, 'flag': flag, 'vittoria': vittoria,
-	               'elementoVinto': elementoVinto, 'elementoGiaVinto': elementoGiaVinto, 'vitaboss': vitaboss})
+	return render(request, "dettaglioBoss.html", context)
