@@ -1,4 +1,6 @@
 Repository progetto ISW A.A. 2020/2021
+# NON INDENTARE COL COMANDO INDENTA DI PYCHARM IL FILE INVENTARIO.HTML
+_l'indentazione automatica di questo file porta alla separazione di un if in due righe, cosa che a quanto pare non è gradita da django_
 
 Istruzioni:
 
