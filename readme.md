@@ -15,3 +15,9 @@ Istruzioni:
 Credenziali admin presenti all'interno del db:
 `username: admin
 password: riot123`
+Credenziali di test presenti:
+`username: test1
+password: 8bt_CX4576pduxm
+`
+`username: test2
+password: pZEecAt.WVnWx3K`
