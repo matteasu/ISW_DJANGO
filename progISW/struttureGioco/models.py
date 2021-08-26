@@ -69,7 +69,7 @@ class Personaggio(models.Model):
 
 	vita = models.IntegerField(default = 10)
 	vitalita = models.IntegerField(default = 1)
-	forza = models.IntegerField(default = 1)
+	forza = models.IntegerField(default = 2)
 	destrezza = models.IntegerField(default = 1)
 	intelligenza = models.IntegerField(default = 1)
 	tempra = models.IntegerField(default = 1)
