@@ -10,7 +10,7 @@ import unittest
 class AccountTest(TestCase):
 	def setUp(self):
 		self.client = Client()
-		self.account = Account.objects.create_user(playerID = 'NinoNino', password = 'Paramedico234')
+		self.account = Account.objects.create_user(playerID = 'Nino Nino', password = 'Paramedico234')
 		self.superAccount = Account.objects.create_superuser(playerID = "Asu", password = "Fantastico123")
 
 	# creazione utente di prova per il test unitario
@@ -40,7 +40,7 @@ class AccountTest(TestCase):
 		self.assertTrue(self.superAccount.is_superuser)
 
 	def test_login(self):
-		response = self.client.login(playerID = "NinoNino", password = "Paramedico234")
+		response = self.client.login(playerID = "Nino Nino", password = "Paramedico234")
 		self.assertTrue(response)
 
 	def test_login_raises_ValidationError(self):
