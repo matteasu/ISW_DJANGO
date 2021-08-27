@@ -62,45 +62,50 @@
 	<div class="row ms-1">
 		<h3 class="text-white font-monospace">Equipaggiamenti</h3>
 		<div class="col mt-3">
+			{% if equip %}
+				<div class="row row-cols-sm-2 row-cols-lg-4 row-cols-xl-6  g-4">
+					{% for item in equip %}
+					<div class="col">
+						<div class="card h-100">
+							<div class="card-header">
+								<h5 class="card-title font-monospace">{{item.nome}}</h5>
+							</div>
+							<div class="card-body">
+								{% if item.tipo == "P"%}
+								<p class="card-text fst-italic">Arma Primaria</p>
+								{% elif item.tipo == "S"%}
+								<p class="card-text fst-italic">Arma Secondaria</p>
+								{% else %}
+								<p class="card-text fst-italic">Armatura</p>
+								{% endif %}
+								<p class="card-text font-monospace">Boss: {{item.boss}}</p>
+							</div>
+							<ul class="list-group list-group-flush">
+								<li class="list-group-item font-monospace ">VTL {{item.vitalita}}</li>
+								<li class="list-group-item font-monospace ">FRZ {{item.forza}}</li>
+								<li class="list-group-item font-monospace ">DEX {{item.destrezza}}</li>
+								<li class="list-group-item font-monospace ">INT {{item.intelligenza}}</li>
+								<li class="list-group-item font-monospace ">TMP {{item.tempra}}</li>
+							</ul>
+							<div class="card-footer text-center">
+								<a class="btn btn-primary" target="_blank"
+								   href="http://127.0.0.1:8000/admin/struttureGioco/equipaggiamento/{{item.id}}/change">Modifica</a>
+							</div>
 
-			<div class="row row-cols-sm-2 row-cols-lg-4 row-cols-xl-6  g-4">
-				{% for item in equip %}
-				<div class="col">
-					<div class="card h-100">
-						<div class="card-header">
-							<h5 class="card-title font-monospace">{{item.nome}}</h5>
 						</div>
-						<div class="card-body">
-							{% if item.tipo == "P"%}
-							<p class="card-text fst-italic">Arma Primaria</p>
-							{% elif item.tipo == "S"%}
-							<p class="card-text fst-italic">Arma Secondaria</p>
-							{% else %}
-							<p class="card-text fst-italic">Armatura</p>
-							{% endif %}
-							<p class="card-text font-monospace">Boss: {{item.boss}}</p>
-						</div>
-						<ul class="list-group list-group-flush">
-							<li class="list-group-item font-monospace ">VTL {{item.vitalita}}</li>
-							<li class="list-group-item font-monospace ">FRZ {{item.forza}}</li>
-							<li class="list-group-item font-monospace ">DEX {{item.destrezza}}</li>
-							<li class="list-group-item font-monospace ">INT {{item.intelligenza}}</li>
-							<li class="list-group-item font-monospace ">TMP {{item.tempra}}</li>
-						</ul>
-						<div class="card-footer text-center">
-							<a class="btn btn-primary" target="_blank"
-							   href="http://127.0.0.1:8000/admin/struttureGioco/equipaggiamento/{{item.id}}/change">Modifica</a>
-						</div>
-
 					</div>
+					{%endfor%}
 				</div>
-				{%endfor%}
-			</div>
+			{% else %}
+				<h4 class="text-white">Equipaggiamenti non presenti</h4>
+
+			{%endif%}
 		</div>
 	</div>
 	<div class="row ms-1 mt-3">
 		<h3 class="text-white font-monospace">Boss</h3>
 		<div class="col mt-3">
+			{%if bossDrop%}
 			<div class="row row-cols-sm-2 row-cols-lg-4 row-cols-xl-6  g-4">
 				{% for b in bossDrop %}
 				<div class="col">
@@ -134,6 +139,9 @@
 				</div>
 				{%endfor%}
 			</div>
+			{%else %}
+				<h4 class=" text-white">Boss non presenti </h4>
+			{%endif%}
 
 		</div>
 	</div>

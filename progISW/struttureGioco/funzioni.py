@@ -51,7 +51,7 @@ def combattiBoss(user, boss):
 			danni = atk - boss.tempra
 
 		if danni <= 0:
-			danni = 50
+			danni = 1
 
 		vitaboss -= danni
 
@@ -74,6 +74,8 @@ def combattiBoss(user, boss):
 			danni = 5
 
 		vitapg -= danni
+		print(vitapg)
+		print(vitaboss)
 
 	if vitapg > vitaboss:
 		win = True

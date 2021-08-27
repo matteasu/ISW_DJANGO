@@ -44,8 +44,8 @@ def inventarioView(request):
 	if not user.is_authenticated:
 		return redirect("login")
 
-	if not user.is_authenticated:
-		return redirect("login")
+	if user.is_admin:
+		return redirect("home")
 	if request.POST:
 		itemID = request.POST.get("idItem")
 		modificaEquip(user, itemID)
@@ -75,6 +75,9 @@ def luoghiView(request):
 	if not user.is_authenticated:
 		return redirect("login")
 
+	if user.is_admin:
+		return redirect("home")
+
 	boss = Boss.objects.all().filter(abilitato = True)
 
 	context = {'listaBoss': boss}
@@ -90,6 +93,9 @@ def dettaglioBossView(request, nomeLuogo):
 
 	if not user.is_authenticated:
 		return redirect("login")
+
+	if user.is_admin:
+		return redirect("home")
 	try:
 		boss = Boss.objects.get(luogo = nomeLuogo)
 		context['boss'] = boss

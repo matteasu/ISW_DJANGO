@@ -82,15 +82,14 @@
 				</div>
 				<ul class="list-group list-group-flush">
 					{% if request.user.personaggio.armaPrimaria is not None %}
-					<li class="list-group-item font-monospace ">PRIMARIA - {{request.user.personaggio.armaPrimaria }}
+					<li class="list-group-item font-monospace ">PRIMARIA - {{request.user.personaggio.armaPrimaria}}
 					</li>
 					{% else %}
 					<li class="list-group-item font-monospace ">PRIMARIA - VUOTO</li>
 					{% endif %}
 
 					{% if request.user.personaggio.armaSecondaria is not None %}
-					<li class="list-group-item font-monospace ">SECONDARIA - {{request.user.personaggio.armaSecondaria
-						}}
+					<li class="list-group-item font-monospace ">SECONDARIA - {{request.user.personaggio.armaSecondaria}}
 					</li>
 					{% else %}
 					<li class="list-group-item font-monospace ">SECONDARIA - VUOTO</li>
@@ -109,7 +108,7 @@
 
 		<div class="col  offset-sm-3 offset-md-6 mt-5 ps-2 mb-3" id="inventario">
 			{%if zaino is None %}
-			<h4>Inventario Vuoto</h4>
+			<h4 class=" text-white">Inventario Vuoto</h4>
 			{% endif %}
 			<div class="row row-cols-sm-1 ms-sm-1 row-cols-md-2 row-cols-lg-2 row-cols-xl-3 g-4">
 				{% for item in zaino %}
