@@ -15,7 +15,7 @@ class AccountTest(TestCase):
 
 	# creazione utente di prova per il test unitario
 	def test_expected_str_return_value(self):
-		self.assertEqual(self.account.__str__(), "NinoNino")
+		self.assertEqual(self.account.__str__(), "Nino Nino")
 
 	def test_verifica_username_registrazione(self):
 		self.assertRaises(ValueError, Account.objects.create_user, playerID = '', password = 'prova123')

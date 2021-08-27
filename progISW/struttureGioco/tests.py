@@ -1,5 +1,6 @@
-from django.test import TestCase
+from django.test import TestCase, Client
 import unittest
+from django.urls import reverse
 from account.models import Account
 from struttureGioco.models import Inventario, Boss, Personaggio, Equipaggiamento
 from struttureGioco.funzioni import combattiBoss, modificaEquip, sceltaDrop
@@ -21,7 +22,7 @@ class StruttureGiocoTest(TestCase):
 		self.equipaggiamento1 = Equipaggiamento(nome = "Lama Lama Lama", tipo = 'P')
 		self.equipaggiamento2 = Equipaggiamento(nome = "Col Tel Lo", tipo = 'S')
 		self.equipaggiamento3 = Equipaggiamento(nome = "pugnale", tipo = 'S', vitalita = 4, forza = 5)
-
+		self.client = Client()
 		self.equipaggiamento1.save()
 		self.equipaggiamento2.save()
 		self.equipaggiamento3.save()
@@ -87,6 +88,16 @@ class StruttureGiocoTest(TestCase):
 		self.boss1 = Boss(nome = "prova", luogo = "milano", abilitato = True)
 		self.boss1.save()
 
+		accountTest = Account.objects.create_user(playerID = 'Nino Nino', password = 'Paramedico234')
+		personaggio = Personaggio(nome = accountTest.playerID)
+		personaggio.save()
+		accountTest.personaggio = personaggio
+		accountTest.save()
+		self.client.login(playerID = "Nino Nino", password = "Paramedico234")
+
+		response = self.client.get(reverse('dettaglioBoss', args = [self.boss1.luogo]))
+		self.assertEqual(response.status_code, 200)
+		self.assertContains(response, "NESSUN DROP. QUALCHE ADMIN NON HA FATTO IL PROPRIO DOVERE...")
 		self.assertRaises(EmptyResultSet, sceltaDrop, boss = self.boss1)
 
 	def test_modifica_equip_utente(self):
@@ -98,7 +109,7 @@ class StruttureGiocoTest(TestCase):
 		self.account.personaggio.save()
 		self.assertEqual(self.account.personaggio.vitalita, expectedVitalita)
 		self.assertEqual(self.account.personaggio.forza, expectedForza)
-		self.assertIn(self.equipaggiamento3,self.account.personaggio.zaino.all())
+		self.assertIn(self.equipaggiamento3, self.account.personaggio.zaino.all())
 
 	def test_modifica_boss(self):
 		expectedVita = 30
@@ -147,6 +158,7 @@ class StruttureGiocoTest(TestCase):
 		self.equipaggiamento3.boss = self.boss
 		self.equipaggiamento3.save()
 		item = sceltaDrop(self.boss)
+
 		if combattiBoss(self.account, self.boss):
 			self.account.personaggio.zaino.add(item)
 			self.account.personaggio.save()
@@ -165,6 +177,17 @@ class StruttureGiocoTest(TestCase):
 		self.assertEqual(Equipaggiamento.objects.get(nome = eq.nome).tipo, expectedTipo)
 		self.assertEqual(Equipaggiamento.objects.get(nome = eq.nome).vitalita, expectedVitalita)
 		self.assertEqual(Equipaggiamento.objects.get(nome = eq.nome).forza, expectedForza)
+
+	def test_personaggio_has_no_equip(self):
+		accountTest = Account.objects.create_user(playerID = 'Nino Nino', password = 'Paramedico234')
+		personaggio = Personaggio(nome = accountTest.playerID)
+		personaggio.save()
+		accountTest.personaggio = personaggio
+		accountTest.save()
+		self.client.login(playerID = "Nino Nino", password = "Paramedico234")
+		response = self.client.get(reverse('inventario'))
+		self.assertEqual(response.status_code, 200)
+		self.assertContains(response, "Inventario Vuoto")
 
 
 if __name__ == "__main__":
