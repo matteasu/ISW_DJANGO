@@ -14,11 +14,14 @@ class StruttureGiocoTest(TestCase):
 		self.boss = Boss(nome = "Bossss", luogo = "Milano Marittima", abilitato = True, vita = 120, vitalita = 2,
 		                 forza = 120)
 		self.boss.save()
-		self.account = Account.objects.create_user(playerID = 'Riccardo', password = 'Fallito234')
+		self.account = Account.objects.create_user(playerID = 'Nino Nino', password = 'Paramedico234')
 		self.p = Personaggio(nome = self.account.playerID)
 		self.p.save()
 		self.account.personaggio = self.p
 		self.account.save()
+		
+		self.admin = Account.objects.create_superuser(playerID = "dev", password = "dev23456789")
+		
 		self.equipaggiamento1 = Equipaggiamento(nome = "Lama Lama Lama", tipo = 'P')
 		self.equipaggiamento2 = Equipaggiamento(nome = "Col Tel Lo", tipo = 'S')
 		self.equipaggiamento3 = Equipaggiamento(nome = "pugnale", tipo = 'S', vitalita = 4, forza = 5)
@@ -72,6 +75,11 @@ class StruttureGiocoTest(TestCase):
 		drop = sceltaDrop(self.boss)
 
 		self.assertIn(drop, Equipaggiamento.objects.filter(boss = self.boss))
+		#test view
+		self.client.login(playerID = self.account.playerID, password = 'Paramedico234')
+		response = self.client.get(reverse('dettaglioBoss', args = [self.boss.luogo]))
+		self.assertEqual(response.status_code, 200)
+		self.assertContains(response, drop.nome)
 
 	def test_drop_non_appartente_a_boss(self):
 		self.equipaggiamento1.boss = self.boss
@@ -83,21 +91,22 @@ class StruttureGiocoTest(TestCase):
 		drop = sceltaDrop(self.boss)
 
 		self.assertNotIn(self.equipaggiamento3, Equipaggiamento.objects.filter(boss = self.boss))
+		#test view
+		self.client.login(playerID = self.account.playerID, password = 'Paramedico234')
+		response = self.client.get(reverse('dettaglioBoss', args = [self.boss.luogo]))
+		self.assertEqual(response.status_code, 200)
+		self.assertNotContains(response, self.equipaggiamento3.nome)
 
 	def test_drop_no_items(self):
 		self.boss1 = Boss(nome = "prova", luogo = "milano", abilitato = True)
 		self.boss1.save()
-
-		accountTest = Account.objects.create_user(playerID = 'Nino Nino', password = 'Paramedico234')
-		personaggio = Personaggio(nome = accountTest.playerID)
-		personaggio.save()
-		accountTest.personaggio = personaggio
-		accountTest.save()
-		self.client.login(playerID = "Nino Nino", password = "Paramedico234")
-
+		
+		#test view
+		self.client.login(playerID = self.account.playerID, password = "Paramedico234")
 		response = self.client.get(reverse('dettaglioBoss', args = [self.boss1.luogo]))
 		self.assertEqual(response.status_code, 200)
 		self.assertContains(response, "NESSUN DROP. QUALCHE ADMIN NON HA FATTO IL PROPRIO DOVERE...")
+		
 		self.assertRaises(EmptyResultSet, sceltaDrop, boss = self.boss1)
 
 	def test_modifica_equip_utente(self):
@@ -110,18 +119,37 @@ class StruttureGiocoTest(TestCase):
 		self.assertEqual(self.account.personaggio.vitalita, expectedVitalita)
 		self.assertEqual(self.account.personaggio.forza, expectedForza)
 		self.assertIn(self.equipaggiamento3, self.account.personaggio.zaino.all())
+		
+		#test view
+		self.client.login(playerID = self.account.playerID, password = 'Paramedico234')
+		response = self.client.get(reverse('inventario'))
+		self.assertEqual(response.status_code, 200)
+		if self.equipaggiamento3.tipo == "P":
+			self.assertContains(response, "PRIMARIA - " + self.equipaggiamento3.nome)
+		elif self.equipaggiamento3.tipo == "S":
+			self.assertContains(response, "SECONDARIA - " + self.equipaggiamento3.nome)
+		else:
+			self.assertContains(response, "ARMATURA - " + self.equipaggiamento3.nome)
+
 
 	def test_modifica_boss(self):
 		expectedVita = 30
-		expectedAbilitato = False
+		expectedAbilitato = True
 		expectedNome = "Billie Bossa Nova"
 		self.boss.vita = 30
-		self.boss.abilitato = False
+		self.boss.abilitato = True
 		self.boss.nome = "Billie Bossa Nova"
 		self.boss.save()
 		self.assertEqual(Boss.objects.get(nome = self.boss.nome).nome, expectedNome)
 		self.assertEqual(Boss.objects.get(nome = self.boss.nome).vita, expectedVita)
 		self.assertEqual(Boss.objects.get(nome = self.boss.nome).abilitato, expectedAbilitato)
+		
+		#test view
+		self.client.login(playerID = self.account.playerID, password = "Paramedico234")
+		response = self.client.get(reverse('dettaglioBoss', args = [self.boss.luogo]))
+		self.assertEqual(response.status_code, 200)
+		self.assertContains(response, "VITA " + str(self.boss.vita * self.boss.vitalita))
+		self.assertContains(response, self.boss.nome)
 
 	def test_aggiunta_boss(self):
 		nuovoBoss = Boss(nome = "Nuovo Boss", luogo = "Postiano", abilitato = True, vita = 120, vitalita = 2)
@@ -138,17 +166,28 @@ class StruttureGiocoTest(TestCase):
 		self.assertEqual(Boss.objects.get(nome = nuovoBoss.nome).abilitato, expectedAbilitato)
 		self.assertEqual(Boss.objects.get(nome = nuovoBoss.nome).vita, expectedVita)
 		self.assertEqual(Boss.objects.get(nome = nuovoBoss.nome).vitalita, expectedVitalita)
+		#test view
+		self.client.login(playerID = self.account.playerID, password = "Paramedico234")
+		response = self.client.get(reverse('luoghi'))
+		self.assertEqual(response.status_code, 200)
+		self.assertContains(response, "Postiano")
 
 	def test_modifica_equip(self):
-		self.equipaggiamento1.forza = 50
+		self.equipaggiamento1.forza = 500
 		self.equipaggiamento1.intelligenza = 30
 		self.equipaggiamento1.save()
 
-		expectedForza = 50
+		expectedForza = 500
 		expectedIntelligenza = 30
 
 		self.assertEqual(Equipaggiamento.objects.get(pk = self.equipaggiamento1.id).forza, expectedForza)
 		self.assertEqual(Equipaggiamento.objects.get(pk = self.equipaggiamento1.id).intelligenza, expectedIntelligenza)
+		#test view
+		self.client.login(playerID = self.admin.playerID, password = "dev23456789")
+		response = self.client.get(reverse('home'))
+		self.assertEqual(response.status_code, 200)
+		self.assertContains(response, "FRZ 500")
+		self.assertContains(response, "INT 30")
 
 	def test_battaglia(self):
 		self.account.personaggio.vita = 400
@@ -177,14 +216,19 @@ class StruttureGiocoTest(TestCase):
 		self.assertEqual(Equipaggiamento.objects.get(nome = eq.nome).tipo, expectedTipo)
 		self.assertEqual(Equipaggiamento.objects.get(nome = eq.nome).vitalita, expectedVitalita)
 		self.assertEqual(Equipaggiamento.objects.get(nome = eq.nome).forza, expectedForza)
+		#test view
+		self.client.login(playerID = self.admin.playerID, password = "dev23456789")
+		response = self.client.get(reverse('home'))
+		self.assertEqual(response.status_code, 200)
+		self.assertContains(response, eq.nome)
 
 	def test_personaggio_has_no_equip(self):
-		accountTest = Account.objects.create_user(playerID = 'Nino Nino', password = 'Paramedico234')
+		accountTest = Account.objects.create_user(playerID = 'NinoSenzaEquip', password = 'Paramedico234')
 		personaggio = Personaggio(nome = accountTest.playerID)
 		personaggio.save()
 		accountTest.personaggio = personaggio
 		accountTest.save()
-		self.client.login(playerID = "Nino Nino", password = "Paramedico234")
+		self.client.login(playerID = accountTest.playerID, password = "Paramedico234")
 		response = self.client.get(reverse('inventario'))
 		self.assertEqual(response.status_code, 200)
 		self.assertContains(response, "Inventario Vuoto")
